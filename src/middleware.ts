@@ -2,7 +2,7 @@ import { chain } from "./middlewares/chain";
 import { withClerk } from "./middlewares/withClerkMiddleware";
 import { withNextIntl } from "./middlewares/withNextIntlMiddleware";
 
-const middlewares = [withNextIntl, withClerk];
+const middlewares = [withClerk, withNextIntl];
 export default chain(middlewares);
 
 export const config = {

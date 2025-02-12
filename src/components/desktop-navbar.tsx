@@ -1,48 +1,26 @@
 'use client'
 
-import { BellIcon, UserIcon } from "lucide-react";
+import { BellIcon, Globe, UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { ModeToggle } from "./mode-toggle";
-// import LocalSwitcher from "./local-switcher";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import LocaleSwitcher from "./local-switcher";
+import { useLocale } from "next-intl";
 
 function DesktopNavbar() {
     const { user } = useUser();
-    const router = useRouter();
-    const [selectedLanguage, setSelectedLanguage] = useState<string>('en');
+    const locale = useLocale();
 
-    const handleLanguageChange = (lang: string) => {
-      setSelectedLanguage(lang);
-      router.replace(`/${lang}`);
-    };
-    
     return (
       <div className="hidden md:flex items-center space-x-4">
         <ModeToggle />
 
         <Button variant="ghost" className="flex items-center gap-2" asChild>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="btn">Lang: {selectedLanguage}</button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
-                <DropdownMenuCheckboxItem checked={selectedLanguage === 'en'} onCheckedChange={() => handleLanguageChange('en')}>
-                  English
-                </DropdownMenuCheckboxItem>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleLanguageChange('vi')}>
-                <DropdownMenuCheckboxItem checked={selectedLanguage === 'vi'} onCheckedChange={() => handleLanguageChange('vi')}>
-                  Vietnamese
-                </DropdownMenuCheckboxItem>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <div className='flex items-center gap-1'>
+          <Globe className='h-2 w-2 text-muted-foreground' />
+          <LocaleSwitcher defaultValue={locale} label='Select a locale' />
+        </div>
         </Button>
 
         {user ? (

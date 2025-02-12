@@ -1,32 +1,52 @@
-'use client';
+"use client";
 
-import { useLocale } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import { ChangeEvent, useTransition } from 'react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-export default function LocalSwitcher() {
-  const [isPending, startTransition] = useTransition();
+import { routing, usePathname, useRouter } from "@/i18n/routing";
+import { useParams } from "next/navigation";
+
+type Props = {
+  defaultValue: string;
+  label: string;
+};
+
+export default function LocaleSwitcherSelect({ defaultValue, label }: Props) {
   const router = useRouter();
-  const localActive = useLocale();
 
-  const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const nextLocale = e.target.value;
-    startTransition(() => {
-      router.replace(`/${nextLocale}`);
-    });
-  };
+  const pathname = usePathname();
+  const params = useParams();
+
+  function onSelectChange(nextLocale: string) {
+    router.replace(
+      // @ts-expect-error -- TypeScript will validate that only known `params`
+      // are used in combination with a given `pathname`. Since the two will
+      // always match for the current route, we can skip runtime checks.
+      { pathname, params },
+      { locale: nextLocale as string }
+    );
+  }
+
   return (
-    <label className='border-2 rounded'>
-      <p className='sr-only'>change language</p>
-      <select
-        defaultValue={localActive}
-        className='bg-transparent py-2'
-        onChange={onSelectChange}
-        disabled={isPending}
+    <Select defaultValue={defaultValue} onValueChange={onSelectChange}>
+      <SelectTrigger
+        className='w-[80px] h-8 border-none bg-transparent focus:ring-0 focus:ring-offset-0'
+        aria-label={label}
       >
-        <option value='en'>English</option>
-        <option value='vi'>VietNamese</option>
-      </select>
-    </label>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {routing.locales.map((locale) => (
+          <SelectItem key={locale} value={locale}>
+            {locale.toUpperCase()}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }

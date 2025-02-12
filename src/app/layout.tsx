@@ -1,5 +1,5 @@
 
-function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {
+function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {  
   return children;
 }
 
