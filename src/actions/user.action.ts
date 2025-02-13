@@ -44,7 +44,7 @@ export async function getUserByClerkId(clerkId: string) {
             _count: {
                 select: {
                     follower: true,
-                    following: true,
+                    follwing: true,
                     posts: true,
                 }
             }
