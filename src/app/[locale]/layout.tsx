@@ -45,6 +45,10 @@ export default async function RootLayout({
   return (
     <ClerkProvider>
       <html lang={locale}>
+        <head>
+          <link rel="icon" href="/images/logo.jpg" />
+          <title>Socially</title>
+        </head>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <NextIntlClientProvider locale={locale}  messages={messages}>
             <ThemeProvider
