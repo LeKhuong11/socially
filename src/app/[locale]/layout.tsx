@@ -11,6 +11,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -69,9 +70,10 @@ export default async function RootLayout({
                           {children}
                         </div>
                       </div>
-                    </div>
+                    </div>  
                   </main>
                 </div>
+                <Toaster />
             </ThemeProvider>
           </NextIntlClientProvider>
         </body>
