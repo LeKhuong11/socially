@@ -1,17 +1,26 @@
-import { chain } from "./middlewares/chain";
-import { withClerk } from "./middlewares/withClerkMiddleware";
-import { withNextIntl } from "./middlewares/withNextIntlMiddleware";
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import createMiddleware from 'next-intl/middleware'
 
-const middlewares = [withClerk, withNextIntl];
-export default chain(middlewares);
+const intlMiddleware = createMiddleware({
+  locales: ["en", "vi"],
+  defaultLocale: "en",
+})
+
+const isProtectedRoute = createRouteMatcher(['dashboard/(.*)'])
+
+export default clerkMiddleware(async (auth, req) => {
+  if (isProtectedRoute(req)) await auth.protect()
+
+  return intlMiddleware(req)
+})
 
 export const config = {
   matcher: [
-    // Exclude internal Next.js files and all static files, unless found in search params
+    // Skip Next.js internals and all static files, unless found in search params
     '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
     // Always run for API routes
     '/(api|trpc)(.*)',
     // Match only internationalized pathnames
     '/', '/(vi|en)/:path*'
   ],
-};
+}
