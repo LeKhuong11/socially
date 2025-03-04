@@ -27,28 +27,28 @@ model User {
   comments Comment[]        //One to Many
   likes Like[]              //One to Many
 
-  follower Follows[] @relation("follower")
-  follwing Follows[] @relation("following")
+  followers Follows[] @relation("following")
+  following Follows[] @relation("follower")
 
   notifications Notification[] @relation("userNotifications")
   notificationsCreated Notification[] @relation("notificationCreator")
 }
 
-model Post {
-  id String @id @default(cuid())
-  authorId String
-  content String?
-  image String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Post{
+  id        String    @id @default(cuid())
+  authorId  String
+  content   String?
+  image     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
-  //Relationships
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  comments Comment[]  //One to Many
-  likes Like[]        //One to Many
+  // Relations
+  author User @relation(fields: [authorId],references: [id], onDelete: Cascade) // cascade delete means delete all posts if author is deleted
+  comments Comment[]
+  likes Like[]
   notifications Notification[]
 }
-
+  
 model Comment {
   id String @id @default(cuid())
   authorId String
