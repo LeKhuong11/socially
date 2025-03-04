@@ -1,7 +1,12 @@
 {
     "Home": {
       "title": "Hello world!",
-      "about": "Go to the about page"
+      "about": "Go to the about page",
+      "createPostPlaceholder": "What is on your mind?",
+      "photo": "Photo",
+      "post": "Post",
+      "whoToFollow": "People You May Know",
+      "Posting": "Posting"
     },
     "NotFound": {
       "content": "Something went wrong"

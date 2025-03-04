@@ -9,6 +9,7 @@ import { Button } from './ui/button';
 import { ImageIcon, Loader2Icon, SendIcon } from 'lucide-react';
 import { createPost } from '@/actions/post.action';
 import toast from "react-hot-toast";
+import { useTranslations } from 'next-intl';
 
 function CreatePost() {
     const { user } = useUser();
@@ -16,6 +17,8 @@ function CreatePost() {
     const [ imageUrl, setImageUrl ] = useState("");
     const [ isPosting, setIsPosting ] = useState(false);
     const [showImageUpload, setShowImageUpload] = useState(false);
+
+    const t = useTranslations('Home');
 
     const handleSubmit = async () => {
         if (!content.trim() && !imageUrl) return;
@@ -48,7 +51,7 @@ function CreatePost() {
                             <AvatarImage width={50} src={user?.imageUrl || '/images/avatar-default.jpg'} alt={user?.fullName || 'User Avatar'} />
                         </Avatar>
                         <Textarea 
-                            placeholder='What is on your mind?'
+                            placeholder={t('createPostPlaceholder')}
                             className='min-h-[100px] resize-none border-none forcus-visible:ring-0 p-0 text-base'
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
@@ -67,7 +70,7 @@ function CreatePost() {
                             disabled={isPosting}
                         >
                             <ImageIcon className="size-4 mr-2" />
-                            Photo
+                            {t('photo')}
                         </Button>
                         </div>
                         <Button
@@ -78,12 +81,12 @@ function CreatePost() {
                         {isPosting ? (
                             <>
                                 <Loader2Icon className="size-4 mr-2 animate-spin" />
-                                Posting...
+                                {t('Posting')}...
                             </>
                         ) : (
                             <>
                                 <SendIcon className="size-4 mr-2" />
-                                Post
+                                {t('post')}
                             </>
                         )}
                         </Button>
