@@ -25,15 +25,15 @@ function CreatePost() {
     
         setIsPosting(true);
         try {
-          const result = await createPost(content, imageUrl);
-          if (result?.success) {
-            // reset the form
-            setContent("");
-            setImageUrl("");
-            setShowImageUpload(false);
-    
-            toast.success("Post created successfully");
-          }
+            const result = await createPost(content, imageUrl);
+            if (result?.success) {
+                // reset the form
+                setContent("");
+                setImageUrl("");
+                setShowImageUpload(false);
+        
+                toast.success("Post created successfully");
+            }
         } catch (error) {
           console.error("Failed to create post:", error);
           toast.error("Failed to create post");

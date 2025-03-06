@@ -2,7 +2,7 @@
 
 import { createComment, deletePost, getPosts, toogleLike } from "@/actions/post.action";
 import { SignInButton, useUser } from "@clerk/nextjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Card, CardContent } from "./ui/card";
 import Link from "next/link";
@@ -26,6 +26,12 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
     const [ optimisticLikes, setOptimisticLikes ] = useState(post._count.likes);
     const [showComments, setShowComments] = useState(false);
 
+    useEffect(() => {
+      if (dbUserId !== null) {
+        const isLiked = post.likes.some(like => like.userId === dbUserId);
+        setHasLiked(isLiked);
+      }
+    }, [])
 
     const handleLike = async () => {
         if (isLiking) return;
@@ -126,9 +132,7 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
               <Button
                 variant="ghost"
                 size="sm"
-                className={`text-muted-foreground gap-2 ${
-                  hasLiked ? "text-red-500 hover:text-red-600" : "hover:text-red-500"
-                }`}
+                className={`text-muted-foreground gap-2 ${ hasLiked ? "text-red-500 hover:text-red-600" : "hover:text-red-500" }`}
                 onClick={handleLike}
               >
                 {hasLiked ? (
