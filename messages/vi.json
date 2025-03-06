@@ -2,6 +2,10 @@
   "Auth": {
     "Login": "Đăng nhập"
   },
+  "Sidebar": {
+    "Notifications": "Thông báo",
+    "Profile": "Hồ sơ"
+  },
   "Home": {
     "title": "Xin chào!",
     "about": "Đi đến trang about",

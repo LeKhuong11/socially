@@ -7,11 +7,13 @@ import toast from "react-hot-toast";
 import { Card, CardContent } from "./ui/card";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "./ui/avatar";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, formatRelative, subDays } from "date-fns";
+import { vi, enUS } from "date-fns/locale";
 import { DeleteAlertDialog } from "./delete-alert-dialog";
 import { Button } from "./ui/button";
 import { HeartIcon, LogInIcon, MessageCircleIcon, SendIcon } from "lucide-react";
 import { Textarea } from "./ui/textarea";
+import { useLocale } from "next-intl";
 
 type Posts = Awaited<ReturnType<typeof getPosts>>;
 type Post = Posts[number];
@@ -25,6 +27,8 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
     const [ hasLiked, setHasLiked ] = useState(false);
     const [ optimisticLikes, setOptimisticLikes ] = useState(post._count.likes);
     const [showComments, setShowComments] = useState(false);
+
+    const locale = useLocale();
 
     useEffect(() => {
       if (dbUserId !== null) {
@@ -97,17 +101,15 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
             {/* POST HEADER & TEXT CONTENT */}
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 truncate">
+                <div className="sm:flex-row sm:items-center sm:space-x-2 truncate">
                   <Link
                     href={`/profile/${post.author.username}`}
                     className="font-semibold truncate"
                   >
                     {post.author.name}
                   </Link>
-                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                    <Link href={`/profile/${post.author.username}`}>@{post.author.username}</Link>
-                    <span>•</span>
-                    <span>{formatDistanceToNow(new Date(post.createdAt))} ago</span>
+                  <div style={{ margin: 0 }} className="text-xs text-muted-foreground">
+                    <span>{formatRelative(subDays(new Date(post.createdAt), 3), new Date(), { locale: locale === 'vi' ? vi : enUS })}</span>
                   </div>
                 </div>
                 {/* Check if current user is the post author */}
@@ -172,18 +174,18 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
                     <Avatar className="size-8 flex-shrink-0">
                       <AvatarImage src={comment.author.image ?? "/avatar.png"} />
                     </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                        <span className="font-medium text-sm">{comment.author.name}</span>
-                        <span className="text-sm text-muted-foreground">
-                          @{comment.author.username}
-                        </span>
-                        <span className="text-sm text-muted-foreground">·</span>
-                        <span className="text-sm text-muted-foreground">
-                          {formatDistanceToNow(new Date(comment.createdAt))} ago
+                    <div>
+                      <div className="flex-1 min-w-0 bg-[#232324] py-2 px-3 rounded-lg">
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 \">
+                          <span className="font-bold text-sm">{comment.author.name}</span>
+                        </div>
+                        <p className="text-sm font-thin break-words">{comment.content}</p>
+                      </div>
+                      <div>
+                        <span className="text-xs text-muted-foreground">
+                          {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true, locale: locale === 'vi' ? vi : enUS })}
                         </span>
                       </div>
-                      <p className="text-sm break-words">{comment.content}</p>
                     </div>
                   </div>
                 ))}

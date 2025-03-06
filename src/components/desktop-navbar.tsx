@@ -6,11 +6,12 @@ import Link from "next/link";
 import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { ModeToggle } from "./mode-toggle";
 import LocaleSwitcher from "./local-switcher";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 function DesktopNavbar() {
     const { user } = useUser();
     const locale = useLocale();
+    const t = useTranslations('Sidebar');
 
     return (
       <div className="hidden md:flex items-center space-x-4">
@@ -28,7 +29,7 @@ function DesktopNavbar() {
             <Button variant="ghost" className="flex items-center gap-2" asChild>
               <Link href="/notifications">
                 <BellIcon className="w-4 h-4" />
-                <span className="hidden lg:inline">Notifications</span>
+                <span className="hidden lg:inline">{t("Notifications")}</span>
               </Link>
             </Button>
             <Button variant="ghost" className="flex items-center gap-2" asChild>
@@ -38,7 +39,7 @@ function DesktopNavbar() {
                 }`}
               >
                 <UserIcon className="w-4 h-4" />
-                <span className="hidden lg:inline">Profile</span>
+                <span className="hidden lg:inline">{t("Profile")}</span>
               </Link>
             </Button>
             <UserButton />

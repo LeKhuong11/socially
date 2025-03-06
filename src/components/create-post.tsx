@@ -3,7 +3,7 @@
 import { useUser } from '@clerk/nextjs'
 import React, { useState } from 'react'
 import { Card, CardContent } from './ui/card';
-import { Avatar, AvatarImage } from '@radix-ui/react-avatar';
+import { Avatar, AvatarImage } from "./ui/avatar";
 import { Textarea } from './ui/textarea';
 import { Button } from './ui/button';
 import { ImageIcon, Loader2Icon, SendIcon } from 'lucide-react';

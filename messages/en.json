@@ -2,6 +2,10 @@
   "Auth": {
     "Login": "Login"
   },
+  "Sidebar": {
+    "Notifications": "Notifications",
+    "Profile": "Profile"
+  },
   "Home": {
     "title": "Hello world!",
     "about": "Go to the about page",
