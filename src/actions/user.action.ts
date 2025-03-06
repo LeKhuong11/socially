@@ -112,7 +112,6 @@ export async function getRandomUsers() {
 
 
 export async function toggleFollow(targetUserId: string) {
-    console.log(targetUserId);
     
     try {
       const userId = await getDbUserId();
@@ -129,8 +128,6 @@ export async function toggleFollow(targetUserId: string) {
           },
         },
       });
-      
-      console.log(existingFollow);
 
       if (existingFollow) {
         // unfollow

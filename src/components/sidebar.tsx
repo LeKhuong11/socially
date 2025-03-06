@@ -7,8 +7,7 @@ import { Separator } from '@radix-ui/react-select';
 import { LinkIcon, MapPinIcon } from 'lucide-react';
 import { getUserByClerkId } from '@/actions/user.action';
 import Link from 'next/link';
-import { Avatar } from '@radix-ui/react-avatar';
-import { AvatarImage } from './ui/avatar';
+import { Avatar, AvatarImage } from "./ui/avatar";
 
 async function Sidebar() {
     const authUser = await currentUser();
@@ -26,7 +25,7 @@ async function Sidebar() {
               href={`/profile/${user.username}`}
               className="flex flex-col items-center justify-center"
             >
-              <Avatar className="w-20 h-20 border-2 rounded-full">
+              <Avatar className="w-20 h-20 border-2">
                 <AvatarImage src={user.image || "/avatar.png"} />
               </Avatar>
 

@@ -1,14 +1,22 @@
 {
-    "Home": {
-      "title": "Xin chào!",
-      "about": "Đi đến trang about",
-      "createPostPlaceholder": "Bạn đang nghĩ gì?",
-      "photo": "Ảnh",
-      "post": "Đăng bài",
-      "whoToFollow": "Những người bạn có thể biết",
-      "Posting": "Đang đăng"
-    },
-    "NotFound": {
-      "content": "Có lỗi xảy ra"
-    }
+  "Auth": {
+    "Login": "Đăng nhập"
+  },
+  "Sidebar": {
+    "Notifications": "Thông báo",
+    "Profile": "Hồ sơ"
+  },
+  "Home": {
+    "title": "Xin chào!",
+    "about": "Đi đến trang about",
+    "createPostPlaceholder": "Bạn đang nghĩ gì?",
+    "photo": "Ảnh",
+    "post": "Đăng bài",
+    "whoToFollow": "Những người bạn có thể biết",
+    "Posting": "Đang đăng",
+    "Welcome": "Chào mừng trở lại!"
+  },
+  "NotFound": {
+    "content": "Có lỗi xảy ra"
   }
+}
