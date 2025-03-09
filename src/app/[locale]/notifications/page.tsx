@@ -27,7 +27,7 @@ const getNotificationType = (type: string) => {
     }
   };
 
-function NotificationsPage() {
+function Notifications() {
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -132,4 +132,4 @@ function NotificationsPage() {
   )
 }
 
-export default NotificationsPage
+export default Notifications
