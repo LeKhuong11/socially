@@ -34,7 +34,7 @@ function DesktopNavbar() {
             </Button>
             <Button variant="ghost" className="flex items-center gap-2" asChild>
               <Link
-                href={`${locale}/profile/${
+                href={`/profile/${
                   user.username ?? user.emailAddresses[0].emailAddress.split("@")[0]
                 }`}
               >
