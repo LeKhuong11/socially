@@ -2,18 +2,6 @@ import { getPostsByUserId, getProfileByUsername, getUserLikedPosts, isFollowing 
 import { notFound } from "next/navigation";
 import ProfilePage from "./profile-page";
 
-
-export async function generateMetaData({params}: {params: {username: string}}) {
-    const user = await getProfileByUsername(params.username);
-    if (!user) notFound();
-
-    return {
-        title: user.username ?? user.username,
-        description: user.bio ?? `${user.username}'s profile`,
-    };
-
-}
-
 async function Profile({params}: {params: {username: string}}) {
     const user = await getProfileByUsername(params.username);
     if (!user) notFound();
