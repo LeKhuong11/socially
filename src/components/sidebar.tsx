@@ -1,4 +1,5 @@
-import React from 'react'
+"use client"
+
 import { currentUser } from '@clerk/nextjs/server'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { SignInButton, SignUpButton } from '@clerk/nextjs';
@@ -10,15 +11,15 @@ import Link from 'next/link';
 import { Avatar, AvatarImage } from "./ui/avatar";
 
 async function Sidebar() {
-    const authUser = await currentUser();
-    if(!authUser) return <UnAuthenticatedSidebar />;
+    // const authUser = await currentUser();
+    // if(!authUser) return <UnAuthenticatedSidebar />;
 
-    const user = await getUserByClerkId(authUser.id);
-    if (!user) return null;
+    // const user = await getUserByClerkId('authUser.id');
+    // if (!user) return null;
     
   return (
     <div className="sticky top-20">
-      <Card>
+      {/* <Card>
         <CardContent className="pt-6">
           <div className="flex flex-col items-center text-center">
             <Link
@@ -70,7 +71,7 @@ async function Sidebar() {
             </div>
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
     </div>
   )
 }
