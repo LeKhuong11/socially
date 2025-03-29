@@ -1,6 +1,6 @@
+"use client"
 
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { LoaderCircle } from 'lucide-react'
@@ -8,17 +8,22 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { signUpSchema } from './validation'
 import { signUp } from '@/actions/user.action'
+import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 
 function SignUp() {
   const [processing, setProcessing] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string[] }>({})
   const [clientErrors, setClientErrors] = useState<{ [key: string]: string[] }>({})
 
+  const router = useRouter();
+
   async function handleSubmit(formData: FormData) {
     setClientErrors({})
     setProcessing(true)
-
+    
     const result = signUpSchema.safeParse({
+      name: formData.get('name'),
       email: formData.get('email'),
       password: formData.get('password'),
       confirmPassword: formData.get('confirmPassword'),
@@ -37,12 +42,17 @@ function SignUp() {
       setProcessing(false)
       return
     }
-
+    
     const serverResult = await signUp(formData)
-    if (serverResult?.errors) {
-      setErrors(serverResult.errors)
-      setProcessing(false)
+    
+    if(serverResult.success) {
+      router.push('/signin')
+      toast.success(serverResult.message || "Sign-up successfully!")
+    } else {
+      toast.error(serverResult.message || "Sign-up fail. Please try again!")
     }
+    setProcessing(false)
+    setErrors(serverResult.errors || {})
   }
 
   function handleInputChange(field: string, value: string, formElement: HTMLFormElement) {
@@ -50,11 +60,12 @@ function SignUp() {
     formData.set(field, value)
 
     const result = signUpSchema.safeParse({
+      name: formData.get('name'),
       email: formData.get('email'),
       password: formData.get('password'),
       confirmPassword: formData.get('confirmPassword'),
     })
-
+    
     if (!result.success) {
       const fieldErrors = result.error.errors
         .filter((error) => error.path[0] === field)
@@ -90,6 +101,7 @@ function SignUp() {
         <form className="flex flex-col gap-4" onSubmit={(e) => {
           e.preventDefault();
           const formData = new FormData(e.target as HTMLFormElement);
+          
           handleSubmit(formData);
         }}>
           <div className="grid gap-6">
@@ -133,7 +145,6 @@ function SignUp() {
               ))}
             </div>
 
-            {/* Trường Mật khẩu */}
             <div className="grid gap-2">
               <Label htmlFor="password">Mật khẩu</Label>
               <Input
@@ -153,12 +164,12 @@ function SignUp() {
               ))}
             </div>
 
-            {/* Trường Xác nhận mật khẩu */}
             <div className="grid gap-2">
               <Label htmlFor="confirmPassword">Xác nhận mật khẩu</Label>
               <Input
                 id="confirmPassword"
                 type="password"
+                name="confirmPassword"
                 required
                 tabIndex={4}
                 autoComplete="new-password"

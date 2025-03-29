@@ -1,8 +1,7 @@
 import { z } from 'zod'
 
-// Validation schemas
-export const signUpSchema = z
-  .object({
+export const signUpSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
     email: z.string().toLowerCase().email('Invalid email address'),
     password: z
       .string()

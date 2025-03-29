@@ -87,6 +87,7 @@ export async function createCookie(userId: string) {
 export async function signUp(formData: FormData) {
   try {
     const validatedFields = signUpSchema.safeParse({
+      name: formData.get('name'),
       email: formData.get('email'),
       password: formData.get('password'),
       confirmPassword: formData.get('confirmPassword'),
@@ -99,7 +100,7 @@ export async function signUp(formData: FormData) {
       }
     }
   
-    const { email, password } = validatedFields.data
+    const { name, email, password } = validatedFields.data
   
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -118,6 +119,7 @@ export async function signUp(formData: FormData) {
     const passwordHash = await bcrypt.hash(password, 10)
     await prisma.user.create({
       data: {
+        name,
         email,
         password: passwordHash,
         username: email.split('@')[0],
@@ -130,7 +132,7 @@ export async function signUp(formData: FormData) {
     };
   } catch (error) {
     console.log(error);
-    return { success: false, error: "Failed to sign up" };
+    return { success: false, message: "Sign-up fail. Please try again 123123!", error: "Failed to sign up" };
   }
 }
 
