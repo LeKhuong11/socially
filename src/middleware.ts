@@ -17,7 +17,6 @@ export default clerkMiddleware(async (auth, req) => {
 export const config = {
   matcher: [
     '/((?!api|_next|.*\\..*).*)',
-    // Áp dụng cho các đường dẫn quốc tế hóa
     '/:locale(en|vi)/:path*'
   ],
 }
