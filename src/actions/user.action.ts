@@ -1,7 +1,6 @@
 "use server"
 
 import { prisma } from "@/lib/prisma";
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
@@ -44,7 +43,7 @@ export async function signIn(formData: FormData) {
         },
       }
         
-    // await createCookie(user.id);
+    await createCookie(user.id);
     return { 
       success: true, 
       user: user,
@@ -136,38 +135,15 @@ export async function signUp(formData: FormData) {
   }
 }
 
-
-export async function syncUser() {
-    try {   
-        const { userId } = await auth();
-        const user = await currentUser();
-
-        if(!user || !userId) return;
-
-        const existingUser = await prisma.user.findUnique({
-            where: {
-                id: userId
-            }
-        });
-
-        if(existingUser) return existingUser;
-
-        const dbUser = await prisma.user.create({
-            data: {
-                name: `${user.firstName} ${user.lastName}`,
-                username: user.username ?? user.emailAddresses[0].emailAddress.split('@')[0],  
-                email: user.emailAddresses[0].emailAddress,
-                image: user.imageUrl,
-                password: await bcrypt.hash("123456", 10),
-            }
-        });
-
-        return dbUser;
+export async function getUserById(id: string) {
+    try {
+      return await prisma.user.findUnique({
+        where: { id },
+      });
     } catch (error) {
         console.error(error);
     }
 }
-
 
 // export async function getUserByClerkId(userId: string) {
 //     return await prisma.user.findUnique({

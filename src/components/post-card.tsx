@@ -1,7 +1,7 @@
 "use client"
 
 import { createComment, deletePost, getPosts, toogleLike } from "@/actions/post.action";
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { SignInButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Card, CardContent } from "./ui/card";
@@ -14,12 +14,13 @@ import { Button } from "./ui/button";
 import { HeartIcon, LogInIcon, MessageCircleIcon, SendIcon } from "lucide-react";
 import { Textarea } from "./ui/textarea";
 import { useLocale } from "next-intl";
+import { useAppContext } from "@/app/context-provider";
 
 type Posts = Awaited<ReturnType<typeof getPosts>>;
 type Post = Posts[number];
 
 function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
-    const { user } = useUser();
+    const { user } = useAppContext();
     const [ newComment, setNewComment ] = useState("");
     const [ isCommenting, setIsCommenting ] = useState(false);
     const [ isLiking, setIsLiking ] = useState(false);
@@ -194,7 +195,7 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
               {user ? (
                 <div className="flex space-x-3">
                   <Avatar className="size-8 flex-shrink-0">
-                    <AvatarImage src={user?.imageUrl || "/avatar.png"} />
+                    <AvatarImage src={user?.image || "/avatar.png"} />
                   </Avatar>
                   <div className="flex-1">
                     <Textarea

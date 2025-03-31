@@ -1,15 +1,7 @@
 "use client"
 
+import { User } from "@prisma/client";
 import { createContext, useContext, useEffect, useState } from "react";
-
-export interface User {
-    id: string | null;
-    email: string | null;
-    username: string | null;
-    name?: string;
-    image?: string;
-    createdAt?: string;
-}   
 
 interface AuthContextType {
     user: User | null;
@@ -38,6 +30,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 email: '11lekhuong@gmail.com',
                 username: 'khuongdev',
                 name: 'Khuong',
+                password: '',
+                bio: null,
+                image: null,
+                location: null,
+                website: null,
+                createdAt: new Date(),
+                updatedAt: new Date(),
             })
           } catch (error) {
             console.error("Failed to fetch user", error);

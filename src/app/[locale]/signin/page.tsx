@@ -9,8 +9,9 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import { signInSchema } from './validation'
 import { signIn } from '@/actions/user.action'
-import { useAppContext, User } from '@/app/context-provider'
+import { useAppContext } from '@/app/context-provider'
 import { useRouter } from 'next/navigation'
+import { User } from '@prisma/client'
 
 function SignIn() {
     const [processing, setProcessing] = useState(false);
@@ -55,13 +56,24 @@ function SignIn() {
                 if (serverResult?.errors) {
                     setErrors(serverResult.errors)
                 }
-                const user: User = {
-                    id: serverResult.user?.id ?? null,
-                    email: serverResult.user?.email ?? null,
-                    username: serverResult.user?.username ?? null,
-                    name: serverResult.user?.name ?? undefined,
+                if (serverResult.user) {
+                    const user: User = {
+                        id: serverResult.user.id,
+                        email: serverResult.user.email,
+                        username: serverResult.user.username,
+                        name: serverResult.user.name ?? null,
+                        password: '',
+                        bio: serverResult.user.bio ?? null,
+                        image: serverResult.user.image ?? null,
+                        location: serverResult.user.location ?? null,
+                        website: serverResult.user.website ?? null,
+                        createdAt: new Date(serverResult.user.createdAt),
+                        updatedAt: new Date(serverResult.user.updatedAt),
+                    }
+                    setUser(user.id ? user : null)
+                } else {
+                    setUser(null)
                 }
-                setUser(user.id ? user : null)
                 setProcessing(false)
                 router.push('/')
                 
