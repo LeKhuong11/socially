@@ -6,20 +6,19 @@ import { SignInButton, SignUpButton } from '@clerk/nextjs';
 import { Button } from "@/components/ui/button";
 import { Separator } from '@radix-ui/react-select';
 import { LinkIcon, MapPinIcon } from 'lucide-react';
-import { getUserByClerkId } from '@/actions/user.action';
 import Link from 'next/link';
 import { Avatar, AvatarImage } from "./ui/avatar";
 
 async function Sidebar() {
-    // const authUser = await currentUser();
-    // if(!authUser) return <UnAuthenticatedSidebar />;
+    const authUser = await currentUser();
+    if(!authUser) return <UnAuthenticatedSidebar />;
 
-    // const user = await getUserByClerkId('authUser.id');
-    // if (!user) return null;
+    const user = await getUserByClerkId(authUser.id);
+    if (!user) return null;
     
   return (
     <div className="sticky top-20">
-      {/* <Card>
+      <Card>
         <CardContent className="pt-6">
           <div className="flex flex-col items-center text-center">
             <Link
@@ -71,7 +70,7 @@ async function Sidebar() {
             </div>
           </div>
         </CardContent>
-      </Card> */}
+      </Card>
     </div>
   )
 }
@@ -103,3 +102,7 @@ const UnAuthenticatedSidebar = () => (
   );
 
 export default Sidebar
+function getUserByClerkId(id: string) {
+  throw new Error('Function not implemented.');
+}
+
