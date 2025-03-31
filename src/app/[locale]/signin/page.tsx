@@ -9,17 +9,24 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import { signInSchema } from './validation'
 import { signIn } from '@/actions/user.action'
+import { useAppContext, User } from '@/app/context-provider'
+import { useRouter } from 'next/navigation'
 
 function SignIn() {
     const [processing, setProcessing] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string[] }>({})
     const [clientErrors, setClientErrors] = useState<{ [key: string]: string[] }>({})
+    const { user, setUser } = useAppContext();
+    const router = useRouter();
 
-    async function handleSubmit(formData: FormData) {
+    console.log(user);
+    
+
+    const handleSubmit = (formData: FormData) => {
         // Reset errors
         setClientErrors({})
         setProcessing(true)
-    
+        
         // Validate form data
         const result = signInSchema.safeParse({
             email: formData.get('email'),
@@ -35,19 +42,35 @@ function SignIn() {
                 }
                 formattedErrors[path].push(error.message)
             })
+            
             setClientErrors(formattedErrors)
             setProcessing(false)
             return
         }
     
-        const serverResult = await signIn(formData)
-        if (serverResult?.errors) {
-            setErrors(serverResult.errors)
-            setProcessing(false)
-        }
+        signIn(formData)
+            .then((serverResult) => {
+                console.log(serverResult);
+                
+                if (serverResult?.errors) {
+                    setErrors(serverResult.errors)
+                }
+                const user: User = {
+                    id: serverResult.user?.id ?? null,
+                    email: serverResult.user?.email ?? null,
+                    username: serverResult.user?.username ?? null,
+                    name: serverResult.user?.name ?? undefined,
+                }
+                setUser(user.id ? user : null)
+                setProcessing(false)
+                router.push('/')
+                
+            }).catch(() => {
+                setProcessing(false)
+            })
     }
 
-    function handleInputChange(field: string, value: string) {
+    const handleInputChange = (field: string, value: string) => {
         const result = signInSchema.safeParse({
             email: field === 'email' ? value : '',
             password: field === 'password' ? value : '',
@@ -88,6 +111,7 @@ function SignIn() {
                         <Input
                             id="email"
                             type="email"
+                            name="email"
                             required
                             autoFocus
                             tabIndex={1}
@@ -110,6 +134,7 @@ function SignIn() {
                         <Input
                             id="password"
                             type="password"
+                            name="password"
                             required
                             tabIndex={2}
                             autoComplete="current-password"

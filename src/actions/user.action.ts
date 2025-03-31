@@ -44,7 +44,7 @@ export async function signIn(formData: FormData) {
         },
       }
         
-    await createCookie(user.id);
+    // await createCookie(user.id);
     return { 
       success: true, 
       user: user,

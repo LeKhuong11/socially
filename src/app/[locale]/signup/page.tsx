@@ -18,7 +18,7 @@ function SignUp() {
 
   const router = useRouter();
 
-  async function handleSubmit(formData: FormData) {
+  const handleSubmit = (formData: FormData) => {
     setClientErrors({})
     setProcessing(true)
     
@@ -43,19 +43,19 @@ function SignUp() {
       return
     }
     
-    const serverResult = await signUp(formData)
-    
-    if(serverResult.success) {
-      router.push('/signin')
-      toast.success(serverResult.message || "Sign-up successfully!")
-    } else {
-      toast.error(serverResult.message || "Sign-up fail. Please try again!")
-    }
-    setProcessing(false)
-    setErrors(serverResult.errors || {})
+    signUp(formData)
+      .then((serverResult) => {
+        if (serverResult?.success) {
+          router.push('/signin')
+          toast.success(serverResult.message || "Sign-up successfully!")
+        }
+      }).catch((serverResult) => {
+        toast.error(serverResult.message || "Sign-up fail. Please try again!")
+        setErrors(serverResult.errors || {})
+      });
   }
 
-  function handleInputChange(field: string, value: string, formElement: HTMLFormElement) {
+  const handleInputChange = (field: string, value: string, formElement: HTMLFormElement) => {
     const formData = new FormData(formElement)
     formData.set(field, value)
 
