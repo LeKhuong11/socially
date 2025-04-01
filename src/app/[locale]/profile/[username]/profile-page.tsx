@@ -72,6 +72,9 @@ function ProfilePage({user, posts, likedPosts, isFollowing: initialIsFollowing, 
 
     const isOwnProfile = currentUser?.username === user.username || currentUser?.emailAddresses[0].emailAddress.split("@")[0] === user.username;
     const formattedDate = format(new Date(user.createdAt), "MMMM yyyy");
+    const avatar = user.image ?? "images/avatar-default.jpg";
+    console.log("avatar", avatar);
+    
   return (
     <div className="max-w-3xl mx-auto">
       <div className="grid grid-cols-1 gap-6">
@@ -80,7 +83,7 @@ function ProfilePage({user, posts, likedPosts, isFollowing: initialIsFollowing, 
                 <CardContent className="pt-6">
                 <div className="flex flex-col items-center text-center">
                     <Avatar className="w-24 h-24">
-                    <AvatarImage src={user.image ?? "/avatar.png"} />
+                      <AvatarImage src={avatar} />
                     </Avatar>
                     <h1 className="mt-4 text-2xl font-bold">{user.name ?? user.username}</h1>
                     <p className="text-muted-foreground">@{user.username}</p>

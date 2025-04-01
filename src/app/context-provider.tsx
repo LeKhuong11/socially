@@ -1,30 +1,30 @@
 "use client"
 
+import { getUserFromToken } from "@/actions/user.action";
 import { User } from "@prisma/client";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
-    user: User | null;
-    setUser: (user: User | null) => void;
+    user: Omit<User, "password"> | null;
+    setUser: (user: Omit<User, "password"> | null) => void;
 }
 
 const AppContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<Omit<User, "password"> | null>(null);
 
     useEffect(() => {
         async function fetchUser() {
           try {
-            // const res = await fetch("/api/auth/me", {
-            //   method: "GET",
-            //   headers: { "Content-Type": "application/json" },
-            // });
+            const user = await getUserFromToken();
     
-            // if (res.ok) {
-            //   const data = await res.json();
-            //   setUser(data.user);
-            // }
+            if (user) {
+              setUser(user as Omit<User, "password">);
+            } else {
+              setUser(null);
+            }
+            
           } catch (error) {
             console.error("Failed to fetch user", error);
           }

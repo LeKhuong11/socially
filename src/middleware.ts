@@ -8,7 +8,7 @@ const intlMiddleware = createMiddleware({
 
 // Các route cần xác thực
 const privatePaths = ['/profile', '/dashboard', '/admin']
-const authPaths = ['/login', '/register']
+const authPaths = ['/signin', '/signup']
 
 export function middleware(req: NextRequest) {
   const accessToken = req.cookies.get('access_token')?.value
@@ -34,7 +34,7 @@ export function middleware(req: NextRequest) {
 
   // Nếu đã đăng nhập mà vào /login hoặc /register -> Chuyển hướng về dashboard
   if (authPaths.includes(pathWithoutLocale) && isAuthenticated) {
-    return NextResponse.redirect(new URL('/profile', req.url))
+    return NextResponse.redirect(new URL('/', req.url))
   }
 
   return intlMiddleware(req) // Middleware xử lý đa ngôn ngữ
@@ -47,8 +47,8 @@ export const config = {
     '/dashboard/:path*',
     '/admin/:path*',
     '/profile/:path*',
-    '/login',
-    '/register'
+    '/signin',
+    '/signup',
   ],
   runtime: 'nodejs',
 }

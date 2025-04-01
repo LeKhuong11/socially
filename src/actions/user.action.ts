@@ -9,6 +9,12 @@ import { cookies } from "next/headers";
 import { signUpSchema } from "@/app/[locale]/signup/validation";
 // import { auth as authUntils } from "@/utils/auth"
 
+interface DecodedToken {
+  userId: string;
+  iat?: number;
+  exp?: number;
+}
+
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export async function signIn(formData: FormData) {
@@ -82,6 +88,7 @@ export async function createCookie(userId: string) {
       path: '/',
       maxAge: parseInt(process.env.REFRESH_TOKEN_DURATION || "604800", 10),
     });
+    console.log("Cookie created successfully")
 }
 
 export async function signUp(formData: FormData) {
@@ -162,7 +169,7 @@ export async function getUserFromToken() {
     const accessToken = cookieStore.get('access_token')?.value as string;
     
     if (!accessToken) return null;
-    const decoded = jwt.verify(accessToken, JWT_SECRET) as jwt.JwtPayload;
+    const decoded = jwt.verify(accessToken, JWT_SECRET) as DecodedToken;
 
     const user = await getUserById(decoded.userId);
     if (!user) return null;

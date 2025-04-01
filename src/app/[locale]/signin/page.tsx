@@ -12,6 +12,7 @@ import { signIn } from '@/actions/user.action'
 import { useAppContext } from '@/app/context-provider'
 import { useRouter } from 'next/navigation'
 import { User } from '@prisma/client'
+import toast from 'react-hot-toast'
 
 function SignIn() {
     const [processing, setProcessing] = useState(false);
@@ -48,16 +49,17 @@ function SignIn() {
     
         signIn(formData)
             .then((serverResult) => {
+                console.log(serverResult);
+                
                 if (serverResult?.errors) {
                     setErrors(serverResult.errors)
                 }
                 if (serverResult.user) {
-                    const user: User = {
+                    const user: Omit<User, "password"> = {
                         id: serverResult.user.id,
                         email: serverResult.user.email,
                         username: serverResult.user.username,
                         name: serverResult.user.name ?? null,
-                        password: '',
                         bio: serverResult.user.bio ?? null,
                         image: serverResult.user.image ?? null,
                         location: serverResult.user.location ?? null,
@@ -69,8 +71,8 @@ function SignIn() {
                 } else {
                     setUser(null)
                 }
-                setProcessing(false)
                 router.push('/')
+                toast.success(serverResult.message || 'Sign in successfully!')
                 
             }).catch(() => {
                 setProcessing(false)

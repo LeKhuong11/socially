@@ -80,13 +80,13 @@ const UnAuthenticatedSidebar = () => (
           <p className="text-center text-muted-foreground mb-4 text-sm">
             Login to access your profile and connect with others.
           </p>
-            <Button className="w-full" variant="default">
-             <Link href={'/signin'}>Sign In</Link>
-            </Button>
-          
-            <Button className="w-full mt-2" variant="destructive">
-              <Link href={'/signup'}>Sign Up</Link>
-            </Button>
+          <Link href={'/signin'}>
+          <Button className="w-full" variant="default">Sign In</Button>
+        </Link>
+        
+        <Link href={'/signup'}>
+          <Button className="w-full mt-2" variant="destructive">Sign Up</Button>
+        </Link>
         </CardContent>
       </Card>
     </div>
