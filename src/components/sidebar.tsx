@@ -1,20 +1,15 @@
-"use client"
 
-import { currentUser } from '@clerk/nextjs/server'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { SignInButton, SignUpButton } from '@clerk/nextjs';
 import { Button } from "@/components/ui/button";
 import { Separator } from '@radix-ui/react-select';
 import { LinkIcon, MapPinIcon } from 'lucide-react';
 import Link from 'next/link';
 import { Avatar, AvatarImage } from "./ui/avatar";
+import { getUserFromToken } from '@/actions/user.action';
 
 async function Sidebar() {
-    const authUser = await currentUser();
-    if(!authUser) return <UnAuthenticatedSidebar />;
-
-    const user = await getUserByClerkId(authUser.id);
-    if (!user) return null;
+    const user = await getUserFromToken();
+    if(!user) return <UnAuthenticatedSidebar />;
     
   return (
     <div className="sticky top-20">
@@ -85,24 +80,17 @@ const UnAuthenticatedSidebar = () => (
           <p className="text-center text-muted-foreground mb-4 text-sm">
             Login to access your profile and connect with others.
           </p>
-          <SignInButton mode="modal">
-            <Button className="w-full" variant="outline">
-              Login
+            <Button className="w-full" variant="default">
+             <Link href={'/signin'}>Sign In</Link>
             </Button>
-          </SignInButton>
           
-          <SignUpButton mode="modal">
-            <Button className="w-full mt-2" variant="default">
-              Sign Up
+            <Button className="w-full mt-2" variant="destructive">
+              <Link href={'/signup'}>Sign Up</Link>
             </Button>
-          </SignUpButton>
         </CardContent>
       </Card>
     </div>
   );
 
 export default Sidebar
-function getUserByClerkId(id: string) {
-  throw new Error('Function not implemented.');
-}
 

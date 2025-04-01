@@ -17,11 +17,8 @@ function SignIn() {
     const [processing, setProcessing] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string[] }>({})
     const [clientErrors, setClientErrors] = useState<{ [key: string]: string[] }>({})
-    const { user, setUser } = useAppContext();
-    const router = useRouter();
-
-    console.log(user);
-    
+    const { setUser } = useAppContext();
+    const router = useRouter();    
 
     const handleSubmit = (formData: FormData) => {
         // Reset errors
@@ -51,8 +48,6 @@ function SignIn() {
     
         signIn(formData)
             .then((serverResult) => {
-                console.log(serverResult);
-                
                 if (serverResult?.errors) {
                     setErrors(serverResult.errors)
                 }

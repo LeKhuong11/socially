@@ -25,19 +25,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             //   const data = await res.json();
             //   setUser(data.user);
             // }
-            setUser({
-                id: '123',
-                email: '11lekhuong@gmail.com',
-                username: 'khuongdev',
-                name: 'Khuong',
-                password: '',
-                bio: null,
-                image: null,
-                location: null,
-                website: null,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            })
           } catch (error) {
             console.error("Failed to fetch user", error);
           }

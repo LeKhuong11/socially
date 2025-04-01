@@ -12,6 +12,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 import { Toaster } from "react-hot-toast";
+import { headers } from "next/headers";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -42,7 +43,14 @@ export default async function RootLayout({
     notFound();
   }
   const messages = await getMessages();
+  const headersList = headers();
+    const domain = headersList.get('host') || "";
+    const url = headersList.get('referer') || "";
 
+  const hideSidebar = (url === `${domain}/${locale}/signin` || url === `${domain}/${locale}/signup`);
+
+  console.log('pathname', domain);
+    
   return (
     <ClerkProvider>
       <html lang={locale}>
@@ -57,23 +65,25 @@ export default async function RootLayout({
               defaultTheme="system"
               enableSystem
               disableTransitionOnChange
-              >
-                <div className="min-h-screen">
-                  <Navbar />
-                  <main className="py-8">
-                    <div className="max-w-7xl mx-auto px-4">
-                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                        <div className="hidden lg:block lg:col-span-3">
-                          <Sidebar />
-                        </div>
-                        <div className="lg:col-span-9">
-                          {children}
-                        </div>
+            >
+              <div className="min-h-screen">
+                <Navbar />
+                <main className="py-8">
+                  <div className="max-w-7xl mx-auto px-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                      {!hideSidebar && (
+                          <div className="hidden lg:block lg:col-span-3">
+                            <Sidebar />
+                          </div>
+                        )}
+                      <div className="lg:col-span-9">
+                        {children}
                       </div>
-                    </div>  
-                  </main>
-                </div>
-                <Toaster />
+                    </div>
+                  </div>  
+                </main>
+              </div>
+              <Toaster />
             </ThemeProvider>
           </NextIntlClientProvider>
         </body>

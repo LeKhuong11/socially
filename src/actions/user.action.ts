@@ -9,6 +9,8 @@ import { cookies } from "next/headers";
 import { signUpSchema } from "@/app/[locale]/signup/validation";
 // import { auth as authUntils } from "@/utils/auth"
 
+const JWT_SECRET = process.env.JWT_SECRET as string;
+
 export async function signIn(formData: FormData) {
   try {
     const validatedFields = signInSchema.safeParse({
@@ -57,14 +59,13 @@ export async function signIn(formData: FormData) {
 
 
 export async function createCookie(userId: string) {
-  const JWT_SECRET = process.env.JWT_SECRET as string;
   const ACCESS_TOKEN_DURATION = parseInt(process.env.ACCESS_TOKEN_DURATION || "3600", 10);
   const REFRESH_TOKEN_DURATION = parseInt(process.env.REFRESH_TOKEN_DURATION || "604800", 10);
 
   const accessToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: ACCESS_TOKEN_DURATION });
   const refreshToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: REFRESH_TOKEN_DURATION });
 
-  const cookie = cookies()
+  const cookie = await cookies()
 
   cookie.set('access_token', accessToken, {
       httpOnly: true,
@@ -139,46 +140,48 @@ export async function getUserById(id: string) {
     try {
       return await prisma.user.findUnique({
         where: { id },
+        omit: { password: true },
+        include: {
+            _count: {
+                select: {
+                    followers: true,
+                    following: true,
+                    posts: true,
+                }
+            }
+        }
       });
     } catch (error) {
         console.error(error);
     }
 }
 
-// export async function getUserByClerkId(userId: string) {
-//     return await prisma.user.findUnique({
-//         where: {
-//             id: userId
-//         },
-//         include: {
-//             _count: {
-//                 select: {
-//                     followers: true,
-//                     following: true,
-//                     posts: true,
-//                 }
-//             }
-//         }
-//     });
-// }
+export async function getUserFromToken() {
+  try {
+    const cookieStore = cookies();
+    const accessToken = cookieStore.get('access_token')?.value as string;
+    
+    if (!accessToken) return null;
+    const decoded = jwt.verify(accessToken, JWT_SECRET) as jwt.JwtPayload;
+
+    const user = await getUserById(decoded.userId);
+    if (!user) return null;
+    
+    return user;
+  } catch (error) {
+    console.error('Invalid token:', error);
+    return null;
+  }
+}
 
 export async function getDbUserId() {
-    // const { userId: clerkId } = await auth();
-    // if (!clerkId) return null;
-
-    // const user = await getUserByClerkId(clerkId);
-
-    // if(!user) throw new Error("User not found");
-    // return user.id;
-
-    // const accessToken = authUntils.getAccessToken();
-
     try {
-      // const decoded = jwt.verify(accessToken, secretKey);
-      const userId = 'decoded.userId'; // Trích xuất userId từ payload
-      console.log('User ID:', userId);
+      const cookieStore = cookies();
+      const accessToken = cookieStore.get('access_token')?.value as string;
+      if (!accessToken) return null;
+      const decoded = jwt.verify(accessToken, JWT_SECRET) as jwt.JwtPayload;
 
-      return userId
+      return decoded.userId;
     } catch (err) {
       console.error('Token không hợp lệ hoặc đã hết hạn:', err);
     }
