@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAppContext } from '@/app/context-provider';
-import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { signIn } from '@/actions/user.action';
 import { signInSchema } from '@/app/[locale]/signin/validation';
@@ -13,10 +12,8 @@ import { LoaderCircle } from 'lucide-react';
 
 function SignInModal({children}: {children: React.ReactNode}) {
     const [processing, setProcessing] = useState(false);
-    const [errors, setErrors] = useState<{ [key: string]: string[] }>({});
     const [clientErrors, setClientErrors] = useState<{ [key: string]: string[] }>({});
     const { setUser } = useAppContext();
-    const router = useRouter();
 
     const handleSubmit = (formData: FormData) => {
         setClientErrors({});
@@ -42,9 +39,7 @@ function SignInModal({children}: {children: React.ReactNode}) {
     
         signIn(formData)
           .then((serverResult) => {
-            if (serverResult?.errors) {
-              setErrors(serverResult.errors);
-            }
+        
             if (serverResult.user) {
               const user = {
                 id: serverResult.user.id,
