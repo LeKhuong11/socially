@@ -1,20 +1,15 @@
-import React from 'react'
-import { currentUser } from '@clerk/nextjs/server'
+
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { SignInButton, SignUpButton } from '@clerk/nextjs';
 import { Button } from "@/components/ui/button";
 import { Separator } from '@radix-ui/react-select';
 import { LinkIcon, MapPinIcon } from 'lucide-react';
-import { getUserByClerkId } from '@/actions/user.action';
 import Link from 'next/link';
 import { Avatar, AvatarImage } from "./ui/avatar";
+import { getUserFromToken } from '@/actions/user.action';
 
 async function Sidebar() {
-    const authUser = await currentUser();
-    if(!authUser) return <UnAuthenticatedSidebar />;
-
-    const user = await getUserByClerkId(authUser.id);
-    if (!user) return null;
+    const user = await getUserFromToken();
+    if(!user) return <UnAuthenticatedSidebar />;
     
   return (
     <div className="sticky top-20">
@@ -26,7 +21,7 @@ async function Sidebar() {
               className="flex flex-col items-center justify-center"
             >
               <Avatar className="w-20 h-20 border-2">
-                <AvatarImage src={user.image || "/avatar.png"} />
+                <AvatarImage src={user.image || "images/avatar-default.jpg"} />
               </Avatar>
 
               <div className="mt-4 space-y-1">
@@ -85,20 +80,17 @@ const UnAuthenticatedSidebar = () => (
           <p className="text-center text-muted-foreground mb-4 text-sm">
             Login to access your profile and connect with others.
           </p>
-          <SignInButton mode="modal">
-            <Button className="w-full" variant="outline">
-              Login
-            </Button>
-          </SignInButton>
-          
-          <SignUpButton mode="modal">
-            <Button className="w-full mt-2" variant="default">
-              Sign Up
-            </Button>
-          </SignUpButton>
+          <Link href={'/signin'}>
+          <Button className="w-full" variant="default">Sign In</Button>
+        </Link>
+        
+        <Link href={'/signup'}>
+          <Button className="w-full mt-2" variant="destructive">Sign Up</Button>
+        </Link>
         </CardContent>
       </Card>
     </div>
   );
 
 export default Sidebar
+

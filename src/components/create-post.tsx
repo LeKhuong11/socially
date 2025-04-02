@@ -1,6 +1,5 @@
 'use client'
 
-import { useUser } from '@clerk/nextjs'
 import React, { useState } from 'react'
 import { Card, CardContent } from './ui/card';
 import { Avatar, AvatarImage } from "./ui/avatar";
@@ -11,9 +10,10 @@ import { createPost } from '@/actions/post.action';
 import toast from "react-hot-toast";
 import { useTranslations } from 'next-intl';
 import UploadImage from './upload-image';
+import { useAppContext } from '@/app/context-provider';
 
 function CreatePost() {
-    const { user } = useUser();
+    const { user } = useAppContext();
     const [ content, setContent ] = useState("");
     const [ imageUrl, setImageUrl ] = useState("");
     const [ isPosting, setIsPosting ] = useState(false);
@@ -49,7 +49,7 @@ function CreatePost() {
                 <div className='space-y-4'>
                     <div className="space-x-4 flex">
                         <Avatar className="w-10 h-10">
-                            <AvatarImage width={50} src={user?.imageUrl || '/images/avatar-default.jpg'} alt={user?.fullName || 'User Avatar'} />
+                            <AvatarImage width={50} src={user?.image || '/images/avatar-default.jpg'} alt={user?.fullName || 'User Avatar'} />
                         </Avatar>
                         <Textarea 
                             placeholder={t('createPostPlaceholder')}

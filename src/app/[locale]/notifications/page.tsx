@@ -77,7 +77,7 @@ function Notifications() {
                   }`}
                 >
                   <Avatar className="mt-1">
-                    <AvatarImage src={notification.creator.image ?? "/avatar.png"} />
+                    <AvatarImage src={notification.creator.image || "/images/avatar-default.jpg"} />
                   </Avatar>
                   <div className="flex-1 space-y-1">
                     <div className="flex items-center gap-2">
@@ -97,7 +97,7 @@ function Notifications() {
                     {notification.post &&
                       (notification.type === "LIKE" || notification.type === "COMMENT") && (
                         <div className="pl-6 space-y-2">
-                          <div className="text-sm text-muted-foreground rounded-md p-2 bg-muted/30 mt-2">
+                          <div className="text-sm text-muted-foreground rounded-md p-2 bg-muted/50 mt-2">
                             <p>{notification.post.content}</p>
                             {notification.post.image && (
                               <Image
@@ -109,10 +109,13 @@ function Notifications() {
                               />
                             )}
                           </div>
-
+                          
                           {notification.type === "COMMENT" && notification.comment && (
-                            <div className="mx-4 text-sm p-2 bg-accent/50 rounded-md">
-                              {notification.comment.content}
+                            <div className="mx-4 text-sm p-2 bg-accent/80 rounded-md">
+                                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 \">
+                                  <span className="font-bold text-sm">{notification.creator.name ?? notification.creator.username}</span>
+                                </div>
+                                <p className="text-sm font-thin break-words">{notification.comment.content}</p>
                             </div>
                           )}
                         </div>

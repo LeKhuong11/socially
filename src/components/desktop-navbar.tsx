@@ -3,13 +3,15 @@
 import { BellIcon, Globe, UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 import { ModeToggle } from "./mode-toggle";
 import LocaleSwitcher from "./local-switcher";
 import { useLocale, useTranslations } from "next-intl";
+import { useAppContext } from "@/app/context-provider";
 
 function DesktopNavbar() {
-    const { user } = useUser();
+    const { user } = useAppContext();
+    
     const locale = useLocale();
     const t = useTranslations('Sidebar');
 
@@ -35,7 +37,7 @@ function DesktopNavbar() {
             <Button variant="ghost" className="flex items-center gap-2" asChild>
               <Link
                 href={`/profile/${
-                  user.username ?? user.emailAddresses[0].emailAddress.split("@")[0]
+                  user.username ?? user.email.split("@")[0]
                 }`}
               >
                 <UserIcon className="w-4 h-4" />
@@ -45,9 +47,9 @@ function DesktopNavbar() {
             <UserButton />
           </>
         ) : (
-          <SignInButton mode="modal">
-            <Button variant="default">Login</Button>
-          </SignInButton>
+            <Button variant="default">
+              <Link href={'/signin'}>Sign In</Link>
+            </Button>
         )}
       </div>
     );
