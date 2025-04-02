@@ -16,6 +16,15 @@
     "Posting": "Đang đăng",
     "Welcome": "Chào mừng trở lại!"
   },
+  "Notifications": {
+    "Notifications": "Thông báo",
+    "No notifications yet": "Không có thông báo nào",
+    "Unread": "chưa đọc",
+    "Read": "đã đọc",
+    "Like your post": "thích bài viết của bạn",
+    "Start following you": "bắt đầu theo dõi bạn",
+    "Commented on your post": "bình luận về bài viết của bạn"
+  },
   "NotFound": {
     "content": "Có lỗi xảy ra"
   }
