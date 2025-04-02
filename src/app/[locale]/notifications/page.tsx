@@ -1,7 +1,7 @@
 "use client"
 
 import { getNotifications, markNotificationsAsRead } from "@/actions/notifications.action";
-import { NotificationLoading } from "@/components/NotificationLoading";
+import { NotificationLoading } from "@/components/notification-loading";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@radix-ui/react-scroll-area";

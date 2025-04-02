@@ -50,5 +50,4 @@ export const config = {
     '/signin',
     '/signup',
   ],
-  runtime: 'nodejs',
 }
