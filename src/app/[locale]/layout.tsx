@@ -44,8 +44,8 @@ export default async function RootLayout({
   }
   const messages = await getMessages();
   const headersList = headers();
-    const domain = headersList.get('host') || "";
-    const url = headersList.get('referer') || "";
+  const domain = headersList.get('host') || "";
+  const url = headersList.get('referer') || "";
 
   const hideSidebar = (url === `${domain}/${locale}/signin` || url === `${domain}/${locale}/signup`);
 

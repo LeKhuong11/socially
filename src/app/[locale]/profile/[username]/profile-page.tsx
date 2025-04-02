@@ -5,18 +5,18 @@ import { toggleFollow } from "@/actions/user.action"
 import PostCard from "@/components/post-card"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-import { SignInButton, useUser } from "@clerk/nextjs"
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@radix-ui/react-separator"
 import { format } from "date-fns"
 import { CalendarIcon, EditIcon, FileTextIcon, HeartIcon, LinkIcon, MapPinIcon } from "lucide-react"
 import { useState } from "react"
 import toast from "react-hot-toast"
+import { useAppContext } from "@/app/context-provider"
 
 type User = Awaited<ReturnType<typeof getProfileByUsername>>
 type Posts = Awaited<ReturnType<typeof getPostsByUserId>>
@@ -29,7 +29,7 @@ interface ProfilePageProps {
 }
 
 function ProfilePage({user, posts, likedPosts, isFollowing: initialIsFollowing, }: ProfilePageProps) {
-    const { user: currentUser } = useUser();
+    const { user: currentUser } = useAppContext();
     const [showEditDialog, setShowEditDialog] = useState(false);
     const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
     const [isUpdatingFollow, setIsUpdatingFollow] = useState(false);
@@ -70,10 +70,8 @@ function ProfilePage({user, posts, likedPosts, isFollowing: initialIsFollowing, 
         }
     }
 
-    const isOwnProfile = currentUser?.username === user.username || currentUser?.emailAddresses[0].emailAddress.split("@")[0] === user.username;
+    const isOwnProfile = currentUser?.username === user.username || currentUser?.email.split("@")[0] === user.username;
     const formattedDate = format(new Date(user.createdAt), "MMMM yyyy");
-    const avatar = user.image ?? "images/avatar-default.jpg";
-    console.log("avatar", avatar);
     
   return (
     <div className="max-w-3xl mx-auto">
@@ -83,7 +81,7 @@ function ProfilePage({user, posts, likedPosts, isFollowing: initialIsFollowing, 
                 <CardContent className="pt-6">
                 <div className="flex flex-col items-center text-center">
                     <Avatar className="w-24 h-24">
-                      <AvatarImage src={avatar} />
+                      <AvatarImage src={user.image || "images/avatar-default.jpg"} />
                     </Avatar>
                     <h1 className="mt-4 text-2xl font-bold">{user.name ?? user.username}</h1>
                     <p className="text-muted-foreground">@{user.username}</p>
@@ -93,27 +91,53 @@ function ProfilePage({user, posts, likedPosts, isFollowing: initialIsFollowing, 
                     <div className="w-full mt-6">
                     <div className="flex justify-between mb-4">
                         <div>
-                        <div className="font-semibold">{user._count.following.toLocaleString()}</div>
-                        <div className="text-sm text-muted-foreground">Following</div>
+                          <div className="font-semibold">{user._count.following.toLocaleString()}</div>
+                          <div className="text-sm text-muted-foreground">Following</div>
                         </div>
                         <Separator orientation="vertical" />
                         <div>
-                        <div className="font-semibold">{user._count.followers.toLocaleString()}</div>
-                        <div className="text-sm text-muted-foreground">Followers</div>
+                          <div className="font-semibold">{user._count.followers.toLocaleString()}</div>
+                          <div className="text-sm text-muted-foreground">Followers</div>
                         </div>
                         <Separator orientation="vertical" />
                         <div>
-                        <div className="font-semibold">{user._count.posts.toLocaleString()}</div>
-                        <div className="text-sm text-muted-foreground">Posts</div>
+                          <div className="font-semibold">{user._count.posts.toLocaleString()}</div>
+                          <div className="text-sm text-muted-foreground">Posts</div>
                         </div>
                     </div>
                     </div>
 
-                    {/* "FOLLOW & EDIT PROFILE" BUTTONS */}
                     {!currentUser ? (
-                    <SignInButton mode="modal">
-                        <Button className="w-full mt-4">Follow</Button>
-                    </SignInButton>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="default" className="w-full mt-4">Follow</Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                          <DialogHeader>
+                            <DialogTitle>Edit profile</DialogTitle>
+                            <DialogDescription>
+                              Make changes to your profile here. Click save when you are done.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="name" className="text-right">
+                                Name
+                              </Label>
+                              <Input id="name" value="Pedro Duarte" className="col-span-3" />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="username" className="text-right">
+                                Username
+                              </Label>
+                              <Input id="username" value="@peduarte" className="col-span-3" />
+                            </div>
+                          </div>
+                          <DialogFooter>
+                            <Button type="submit">Save changes</Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
                     ) : isOwnProfile ? (
                     <Button className="w-full mt-4" onClick={() => setShowEditDialog(true)}>
                         <EditIcon className="size-4 mr-2" />

@@ -1,7 +1,6 @@
 "use client"
 
 import { createComment, deletePost, getPosts, toogleLike } from "@/actions/post.action";
-import { SignInButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Card, CardContent } from "./ui/card";
@@ -15,6 +14,7 @@ import { HeartIcon, LogInIcon, MessageCircleIcon, SendIcon } from "lucide-react"
 import { Textarea } from "./ui/textarea";
 import { useLocale } from "next-intl";
 import { useAppContext } from "@/app/context-provider";
+import SignInModal from "./signin-modal";
 
 type Posts = Awaited<ReturnType<typeof getPosts>>;
 type Post = Posts[number];
@@ -95,7 +95,7 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
           <div className="flex space-x-3 sm:space-x-4">
             <Link href={`/profile/${post.author.username}`}>
               <Avatar className="size-8 sm:w-10 sm:h-10">
-                <AvatarImage src={post.author.image ?? "/avatar.png"} />
+                <AvatarImage src={post.author.image || '/images/avatar-default.jpg'} />
               </Avatar>
             </Link>
 
@@ -146,12 +146,12 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
                 <span>{optimisticLikes}</span>
               </Button>
             ) : (
-              <SignInButton mode="modal">
+              <SignInModal>
                 <Button variant="ghost" size="sm" className="text-muted-foreground gap-2">
                   <HeartIcon className="size-5" />
                   <span>{optimisticLikes}</span>
                 </Button>
-              </SignInButton>
+              </SignInModal>
             )}
 
             <Button
@@ -168,15 +168,15 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
           {/* COMMENTS SECTION */}
           {showComments && (
             <div className="space-y-4 pt-4 border-t">
-              <div className="space-y-4">
+              <div className="space-y-4 ml-3 ">
                 {/* DISPLAY COMMENTS */}
                 {post.comments.map((comment) => (
-                  <div key={comment.id} className="flex space-x-3">
+                  <div key={comment.id} className="flex space-x-2">
                     <Avatar className="size-8 flex-shrink-0">
-                      <AvatarImage src={comment.author.image ?? "/avatar.png"} />
+                      <AvatarImage src={comment.author.image || "images/avatar-default.jpg"} />
                     </Avatar>
                     <div>
-                      <div className="flex-1 min-w-0 bg-[#232324] py-2 px-3 rounded-lg">
+                      <div className="flex-1 min-w-0 dark:bg-[#303031] bg-[#f3f3f3] py-1 px-3 rounded-lg">
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 \">
                           <span className="font-bold text-sm">{comment.author.name}</span>
                         </div>
@@ -193,9 +193,9 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
               </div>
 
               {user ? (
-                <div className="flex space-x-3">
+                <div className="flex space-x-3 px-2">
                   <Avatar className="size-8 flex-shrink-0">
-                    <AvatarImage src={user?.image || "/avatar.png"} />
+                    <AvatarImage src={user?.image || "/images/avatar-default.jpg"} />
                   </Avatar>
                   <div className="flex-1">
                     <Textarea
@@ -225,12 +225,12 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
                 </div>
               ) : (
                 <div className="flex justify-center p-4 border rounded-lg bg-muted/50">
-                  <SignInButton mode="modal">
+                  <SignInModal>
                     <Button variant="outline" className="gap-2">
                       <LogInIcon className="size-4" />
                       Sign in to comment
                     </Button>
-                  </SignInButton>
+                  </SignInModal>
                 </div>
               )}
             </div>

@@ -7,8 +7,8 @@ const intlMiddleware = createMiddleware({
 })
 
 // Các route cần xác thực
-const privatePaths = ['/profile', '/dashboard', '/admin']
-const authPaths = ['/signin', '/signup']
+const privatePaths = ['/dashboard', '/admin']
+const authPaths = ['/signin', '/signup',]
 
 export function middleware(req: NextRequest) {
   const accessToken = req.cookies.get('access_token')?.value
