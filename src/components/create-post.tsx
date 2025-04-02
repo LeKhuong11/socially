@@ -49,7 +49,7 @@ function CreatePost() {
                 <div className='space-y-4'>
                     <div className="space-x-4 flex">
                         <Avatar className="w-10 h-10">
-                            <AvatarImage width={50} src={user?.image || '/images/avatar-default.jpg'} alt={user?.fullName || 'User Avatar'} />
+                            <AvatarImage width={50} src={user?.image || '/images/avatar-default.jpg'} alt={user?.username || 'User Avatar'} />
                         </Avatar>
                         <Textarea 
                             placeholder={t('createPostPlaceholder')}
