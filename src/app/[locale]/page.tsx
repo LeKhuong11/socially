@@ -15,7 +15,7 @@ export default async function Home() {
       <div className="lg:col-span-6">
         {user ? <CreatePost /> : null}
         {post.map((post) => (
-          <PostCard key={post.id} post={post} dbUserId={dbUserId} />
+          <PostCard key={post.id} post={post} dbUserId={dbUserId} isOwnPost={post.authorId == dbUserId} />
         ))}
       </div>
 
