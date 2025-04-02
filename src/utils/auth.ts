@@ -2,6 +2,7 @@
 
 import { getUserById } from '@/actions/user.action';
 import { User } from '@prisma/client';
+import { Omit } from '@prisma/client/runtime/library';
 import { cookies } from 'next/headers';
 
 export const auth = {
@@ -10,7 +11,7 @@ export const auth = {
         return cookieStore.get('access_token')?.value;
     },
 
-    getCurrentUser: async (id: string): Promise<User | null> => {
+    getCurrentUser: async (id: string): Promise<Omit<User, 'password'> | null> => {
         const cookieStore = cookies();
         const accessToken = cookieStore.get('access_token')?.value;
         if (!accessToken) return null;
