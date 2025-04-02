@@ -3,18 +3,18 @@ import { notFound } from "next/navigation";
 import ProfilePage from "./profile-page";
 
 async function Profile({params}: {params: {username: string}}) {
-    const user = await getProfileByUsername(params.username);
-    if (!user) notFound();
+    const userProfile = await getProfileByUsername(params.username);
+    if (!userProfile) notFound();
 
     const [posts, likedPosts, isCurrentUserFollowing] = await Promise.all([
-        getPostsByUserId(user.id),
-        getUserLikedPosts(user.id),
-        isFollowing(user.id),
+        getPostsByUserId(userProfile.id),
+        getUserLikedPosts(userProfile.id),
+        isFollowing(userProfile.id),
     ]);
 
   return (
     <ProfilePage 
-        user={user} 
+        userProfile={userProfile} 
         posts={posts} 
         likedPosts={likedPosts} 
         isFollowing={isCurrentUserFollowing}

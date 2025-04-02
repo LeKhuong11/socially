@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from '@radix-ui/react-select';
 import { LinkIcon, MapPinIcon } from 'lucide-react';
 import Link from 'next/link';
-import { Avatar, AvatarImage } from "./ui/avatar";
 import { getUserFromToken } from '@/actions/user.action';
+import { Avatar, AvatarImage } from './ui/avatar';
 
 async function Sidebar() {
     const user = await getUserFromToken();
@@ -21,7 +21,7 @@ async function Sidebar() {
               className="flex flex-col items-center justify-center"
             >
               <Avatar className="w-20 h-20 border-2">
-                <AvatarImage src={user.image || "images/avatar-default.jpg"} />
+                <AvatarImage src={user.image || "/images/avatar-default.jpg"} />
               </Avatar>
 
               <div className="mt-4 space-y-1">

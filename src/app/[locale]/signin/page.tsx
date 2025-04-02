@@ -49,8 +49,6 @@ function SignIn() {
     
         signIn(formData)
             .then((serverResult) => {
-                console.log(serverResult);
-                
                 if (serverResult?.errors) {
                     setErrors(serverResult.errors)
                 }

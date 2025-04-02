@@ -18,7 +18,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         async function fetchUser() {
           try {
             const user = await getUserFromToken();
-    
+            
             if (user) {
               setUser(user as Omit<User, "password">);
             } else {

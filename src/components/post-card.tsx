@@ -19,7 +19,7 @@ import SignInModal from "./signin-modal";
 type Posts = Awaited<ReturnType<typeof getPosts>>;
 type Post = Posts[number];
 
-function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
+function PostCard({ post, dbUserId, isOwnPost }: { post: Post; dbUserId: string | null, isOwnPost: boolean }) {
     const { user } = useAppContext();
     const [ newComment, setNewComment ] = useState("");
     const [ isCommenting, setIsCommenting ] = useState(false);
@@ -86,7 +86,7 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
       setIsDeleting(false);
     }
     }
-
+    
   return (
     <div className="mb-4">
       <Card className="overflow-hidden">
@@ -114,7 +114,7 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
                   </div>
                 </div>
                 {/* Check if current user is the post author */}
-                {dbUserId === post.author.id && (
+                {isOwnPost && (
                   <DeleteAlertDialog isDeleting={isDeleting} onDelete={handleDeletePost} />
                 )}
               </div>
@@ -173,7 +173,7 @@ function PostCard({ post, dbUserId }: { post: Post; dbUserId: string | null }) {
                 {post.comments.map((comment) => (
                   <div key={comment.id} className="flex space-x-2">
                     <Avatar className="size-8 flex-shrink-0">
-                      <AvatarImage src={comment.author.image || "images/avatar-default.jpg"} />
+                      <AvatarImage src={comment.author.image || "/images/avatar-default.jpg"} />
                     </Avatar>
                     <div>
                       <div className="flex-1 min-w-0 dark:bg-[#303031] bg-[#f3f3f3] py-1 px-3 rounded-lg">

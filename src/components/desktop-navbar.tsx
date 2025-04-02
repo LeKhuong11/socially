@@ -3,7 +3,6 @@
 import { BellIcon, Globe, UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
 import { ModeToggle } from "./mode-toggle";
 import LocaleSwitcher from "./local-switcher";
 import { useLocale, useTranslations } from "next-intl";
@@ -44,7 +43,6 @@ function DesktopNavbar() {
                 <span className="hidden lg:inline">{t("Profile")}</span>
               </Link>
             </Button>
-            <UserButton />
           </>
         ) : (
             <Button variant="default">

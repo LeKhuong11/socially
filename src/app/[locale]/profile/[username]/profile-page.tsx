@@ -18,27 +18,27 @@ import { useState } from "react"
 import toast from "react-hot-toast"
 import { useAppContext } from "@/app/context-provider"
 
-type User = Awaited<ReturnType<typeof getProfileByUsername>>
+type UserProfile = Awaited<ReturnType<typeof getProfileByUsername>>
 type Posts = Awaited<ReturnType<typeof getPostsByUserId>>
 
 interface ProfilePageProps {
-    user: NonNullable<User>,
+    userProfile: NonNullable<UserProfile>,
     posts: Posts,
     likedPosts: Posts,
     isFollowing: boolean
 }
 
-function ProfilePage({user, posts, likedPosts, isFollowing: initialIsFollowing, }: ProfilePageProps) {
+function ProfilePage({userProfile, posts, likedPosts, isFollowing: initialIsFollowing, }: ProfilePageProps) {
     const { user: currentUser } = useAppContext();
     const [showEditDialog, setShowEditDialog] = useState(false);
     const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
     const [isUpdatingFollow, setIsUpdatingFollow] = useState(false);
 
     const [editForm, setEditForm] = useState({
-        name: user.name || "",
-        bio: user.bio || "",
-        location: user.location || "",
-        website: user.website || "",
+        name: userProfile.name || "",
+        bio: userProfile.bio || "",
+        location: userProfile.location || "",
+        website: userProfile.website || "",
     });
 
     const handleEditSubmit = async () => {
@@ -61,7 +61,7 @@ function ProfilePage({user, posts, likedPosts, isFollowing: initialIsFollowing, 
 
         try {
           setIsUpdatingFollow(true);
-          await toggleFollow(user.id);
+          await toggleFollow(userProfile.id);
           setIsFollowing(!isFollowing);
         } catch {
           toast.error("Failed to update follow status");
@@ -70,8 +70,8 @@ function ProfilePage({user, posts, likedPosts, isFollowing: initialIsFollowing, 
         }
     }
 
-    const isOwnProfile = currentUser?.username === user.username || currentUser?.email.split("@")[0] === user.username;
-    const formattedDate = format(new Date(user.createdAt), "MMMM yyyy");
+    const isOwnProfile = currentUser?.username === userProfile.username || currentUser?.email.split("@")[0] === userProfile.username;
+    const formattedDate = format(new Date(userProfile.createdAt), "MMMM yyyy");
     
   return (
     <div className="max-w-3xl mx-auto">
@@ -81,27 +81,27 @@ function ProfilePage({user, posts, likedPosts, isFollowing: initialIsFollowing, 
                 <CardContent className="pt-6">
                 <div className="flex flex-col items-center text-center">
                     <Avatar className="w-24 h-24">
-                      <AvatarImage src={user.image || "images/avatar-default.jpg"} />
+                      <AvatarImage src={userProfile.image || "/images/avatar-default.jpg"} />
                     </Avatar>
-                    <h1 className="mt-4 text-2xl font-bold">{user.name ?? user.username}</h1>
-                    <p className="text-muted-foreground">@{user.username}</p>
-                    <p className="mt-2 text-sm">{user.bio}</p>
+                    <h1 className="mt-4 text-2xl font-bold">{userProfile.name ?? userProfile.username}</h1>
+                    <p className="text-muted-foreground">@{userProfile.username}</p>
+                    <p className="mt-2 text-sm">{userProfile.bio}</p>
 
                     {/* PROFILE STATS */}
                     <div className="w-full mt-6">
                     <div className="flex justify-between mb-4">
                         <div>
-                          <div className="font-semibold">{user._count.following.toLocaleString()}</div>
+                          <div className="font-semibold">{userProfile._count.following.toLocaleString()}</div>
                           <div className="text-sm text-muted-foreground">Following</div>
                         </div>
                         <Separator orientation="vertical" />
                         <div>
-                          <div className="font-semibold">{user._count.followers.toLocaleString()}</div>
+                          <div className="font-semibold">{userProfile._count.followers.toLocaleString()}</div>
                           <div className="text-sm text-muted-foreground">Followers</div>
                         </div>
                         <Separator orientation="vertical" />
                         <div>
-                          <div className="font-semibold">{user._count.posts.toLocaleString()}</div>
+                          <div className="font-semibold">{userProfile._count.posts.toLocaleString()}</div>
                           <div className="text-sm text-muted-foreground">Posts</div>
                         </div>
                     </div>
@@ -156,21 +156,21 @@ function ProfilePage({user, posts, likedPosts, isFollowing: initialIsFollowing, 
 
                     {/* LOCATION & WEBSITE */}
                     <div className="w-full mt-6 space-y-2 text-sm">
-                    {user.location && (
+                    {userProfile.location && (
                         <div className="flex items-center text-muted-foreground">
                         <MapPinIcon className="size-4 mr-2" />
-                        {user.location}
+                        {userProfile.location}
                         </div>
                     )}
-                    {user.website && (
+                    {userProfile.website && (
                         <div className="flex items-center text-muted-foreground">
                         <LinkIcon className="size-4 mr-2" />
-                        <a href={user.website.startsWith("http") ? user.website : `https://${user.website}`}
+                        <a href={userProfile.website.startsWith("http") ? userProfile.website : `https://${userProfile.website}`}
                             className="hover:underline"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            {user.website}
+                            {userProfile.website}
                         </a>
                         </div>
                     )}
@@ -205,7 +205,7 @@ function ProfilePage({user, posts, likedPosts, isFollowing: initialIsFollowing, 
           <TabsContent value="posts" className="mt-6">
             <div className="space-y-6">
               {posts.length > 0 ? (
-                posts.map((post) => <PostCard key={post.id} post={post} dbUserId={user.id} />)
+                posts.map((post) => <PostCard key={post.id} post={post} dbUserId={userProfile.id} isOwnPost={isOwnProfile}/>)
               ) : (
                 <div className="text-center py-8 text-muted-foreground">No posts yet</div>
               )}
@@ -215,7 +215,7 @@ function ProfilePage({user, posts, likedPosts, isFollowing: initialIsFollowing, 
           <TabsContent value="likes" className="mt-6">
             <div className="space-y-6">
               {likedPosts.length > 0 ? (
-                likedPosts.map((post) => <PostCard key={post.id} post={post} dbUserId={user.id} />)
+                likedPosts.map((post) => <PostCard key={post.id} post={post} dbUserId={userProfile.id} isOwnPost={isOwnProfile} />)
               ) : (
                 <div className="text-center py-8 text-muted-foreground">No liked posts to show</div>
               )}

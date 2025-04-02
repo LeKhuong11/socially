@@ -65,26 +65,27 @@ function SignInModal({children}: {children: React.ReactNode}) {
       };
 
   return (
-    <div>
-        <Dialog>
-            <DialogTrigger asChild>
-                {children}
-            </DialogTrigger>
-            <DialogContent className="max-w-md">
-                <DialogHeader>
-                <DialogTitle>Sign in</DialogTitle>
-                </DialogHeader>
-                <form
-                className="flex flex-col gap-4"
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    const formData = new FormData(e.target as HTMLFormElement);
-                    handleSubmit(formData);
-                }}
-                >
-                <div className="grid gap-2">
-                    <Label htmlFor="email">Email address</Label>
-                    <Input
+      <Dialog>
+          <DialogTrigger asChild>
+            {children}
+          </DialogTrigger>
+          <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle>
+                  <div className="text-center py-2">Sign in</div>
+                </DialogTitle>
+              </DialogHeader>
+              <form
+              className="flex flex-col gap-4"
+              onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.target as HTMLFormElement);
+                  handleSubmit(formData);
+              }}
+              >
+              <div className="grid gap-2">
+                  <Label htmlFor="email">Email address</Label>
+                  <Input
                     id="email"
                     type="email"
                     name="email"
@@ -92,39 +93,38 @@ function SignInModal({children}: {children: React.ReactNode}) {
                     autoFocus
                     autoComplete="email"
                     placeholder="email@example.com"
-                    />
-                    {clientErrors.email?.map((error) => (
+                  />
+                  {clientErrors.email?.map((error) => (
                     <p key={error} className="text-sm text-red-600">
                         {error}
                     </p>
-                    ))}
-                </div>
+                  ))}
+              </div>
 
-                <div className="grid gap-2">
-                    <Label htmlFor="password">Password</Label>
-                    <Input
+              <div className="grid gap-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
                     id="password"
                     type="password"
                     name="password"
                     required
                     autoComplete="current-password"
                     placeholder="Password"
-                    />
-                    {clientErrors.password?.map((error) => (
+                  />
+                  {clientErrors.password?.map((error) => (
                     <p key={error} className="text-sm text-red-600">
                         {error}
                     </p>
-                    ))}
-                </div>
+                  ))}
+              </div>
 
-                <Button type="submit" className="w-full" disabled={processing}>
-                    {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                    Log in
-                </Button>
-                </form>
-            </DialogContent>
-        </Dialog>
-    </div>
+              <Button type="submit" className="w-full" disabled={processing}>
+                {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                Log in
+              </Button>
+              </form>
+          </DialogContent>
+      </Dialog>
   )
 }
 
