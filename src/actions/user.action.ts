@@ -7,7 +7,6 @@ import bcrypt from 'bcryptjs'
 import { signInSchema } from "@/app/[locale]/signin/validation";
 import { cookies } from "next/headers";
 import { signUpSchema } from "@/app/[locale]/signup/validation";
-// import { auth as authUntils } from "@/utils/auth"
 
 interface DecodedToken {
   userId: string;
@@ -55,7 +54,7 @@ export async function signIn(formData: FormData) {
     return { 
       success: true, 
       user: user,
-      message: "Login successfully!",
+      message: "Sign in successfully!",
     };
   } catch (error) {
     console.log(error);
@@ -63,6 +62,43 @@ export async function signIn(formData: FormData) {
   }
 }
 
+export async function signInWithGoogle(formData: FormData) { 
+  try {
+    const email = formData.get('email') as string;
+    const username = formData.get('username') as string;
+    const name = formData.get('name') as string;
+    const avatar = formData.get('avatar') as string;
+
+    let user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (user) {
+      await createCookie(user.id);
+    } else {
+      const newUser = await prisma.user.create({
+        data: {
+          email,
+          username,
+          name,
+          password: '',
+          image: avatar,
+        },
+      });
+
+      // await createCookie(newUser.id);
+      user = newUser;
+    }
+
+    return { 
+      success: true, 
+      user: user,
+      message: "Sign in successfully!",
+    };
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export async function createCookie(userId: string) {
   const ACCESS_TOKEN_DURATION = parseInt(process.env.ACCESS_TOKEN_DURATION || "3600", 10);
@@ -88,7 +124,6 @@ export async function createCookie(userId: string) {
       path: '/',
       maxAge: parseInt(process.env.REFRESH_TOKEN_DURATION || "604800", 10),
     });
-    console.log("Cookie created successfully")
 }
 
 export async function signUp(formData: FormData) {

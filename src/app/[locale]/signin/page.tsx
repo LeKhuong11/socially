@@ -8,11 +8,14 @@ import { LoaderCircle } from 'lucide-react'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { signInSchema } from './validation'
-import { signIn } from '@/actions/user.action'
+import { signIn, signInWithGoogle } from '@/actions/user.action'
 import { useAppContext } from '@/app/context-provider'
 import { useRouter } from 'next/navigation'
 import { User } from '@prisma/client'
 import toast from 'react-hot-toast'
+import GoogleButton from 'react-google-button'
+import { signInWithPopup } from 'firebase/auth'
+import { auth, googleProvider } from '../../../../config/firebase-config'
 
 function SignIn() {
     const [processing, setProcessing] = useState(false);
@@ -91,13 +94,47 @@ function SignIn() {
                 [field]: [fieldError.message],
                 }))
             }
-            } else {
-                setClientErrors((prev) => ({
-                    ...prev,
-                    [field]: [],
-                }))
-            }
-      }
+        } else {
+            setClientErrors((prev) => ({
+                ...prev,
+                [field]: [],
+            }))
+        }
+    }
+
+    const handleGoogleSignIn = async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
+
+            const formData = new FormData();
+            formData.append("email", user.email || "");
+            formData.append("username", user.email ? user.email.split('@')[0] : "");
+            formData.append("name", user.displayName || "");
+            formData.append("avatar", user.photoURL || "");
+            
+            signInWithGoogle(formData)
+                .then((serverResult) => {
+                    console.log(serverResult);
+                    
+                    // if (serverResult?.success) {
+                    //     setErrors(serverResult.errors)
+                    // }
+                    // if (serverResult.user) {
+
+                    // }
+                    // console.log(serverResult);
+                    // router.push('/')
+                    // toast.success(serverResult.message || 'Sign in successfully!')
+                })
+                .catch((serverResult) => {
+                    toast.error(serverResult.message || "Sign-in fail. Please try again!")
+                });
+    
+        } catch (error) {
+        console.error("Lỗi đăng nhập với Google:", error);
+        }
+    };
     
   return (
     <div className='grid grid-cols-1 lg:grid-cols-10 gap-6' >
@@ -179,6 +216,19 @@ function SignIn() {
                     </Link>
                 </div>
             </form>
+            
+            <div className="relative my-6 flex items-center">
+                <div className="flex-grow border-t border-gray-300"></div>
+                <span className="mx-4 text-sm text-gray-500">Or</span>
+                <div className="flex-grow border-t border-gray-300"></div>
+            </div>
+            
+            <div className="flex justify-center mt-5">
+                
+                <GoogleButton
+                    onClick={handleGoogleSignIn}
+                />
+            </div>
         </div>
     </div>
   )
