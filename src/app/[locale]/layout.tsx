@@ -7,7 +7,6 @@ import { NextIntlClientProvider } from 'next-intl';
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 import { Toaster } from "react-hot-toast";
-import { headers } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Socially",
@@ -26,12 +25,8 @@ export default async function RootLayout({
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
-  const messages = await getMessages();
-  const headersList = headers();
-  const domain = headersList.get('host') || "";
-  const url = headersList.get('referer') || "";
 
-  const hideSidebar = (url === `${domain}/${locale}/signin` || url === `${domain}/${locale}/signup`);
+  const messages = await getMessages();
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
@@ -46,11 +41,9 @@ export default async function RootLayout({
           <main className="py-8">
             <div className="max-w-7xl mx-auto px-4">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                {!hideSidebar && (
-                  <div className="hidden lg:block lg:col-span-3">
-                    <Sidebar />
-                  </div>
-                )}
+                <div className="hidden lg:block lg:col-span-3">
+                  <Sidebar />
+                </div>
                 <div className="lg:col-span-9">
                   {children}
                 </div>
