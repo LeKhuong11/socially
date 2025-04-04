@@ -72,7 +72,7 @@ function ProfilePage({userProfile, posts, likedPosts, isFollowing: initialIsFoll
 
     const isOwnProfile = currentUser?.username === userProfile.username || currentUser?.email.split("@")[0] === userProfile.username;
     const formattedDate = format(new Date(userProfile.createdAt), "MMMM yyyy");
-    
+
   return (
     <div className="max-w-3xl mx-auto">
       <div className="grid grid-cols-1 gap-6">
