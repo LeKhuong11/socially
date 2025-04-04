@@ -10,6 +10,7 @@ import { HeartIcon, MessageCircleIcon, UserPlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 type Notifications = Awaited<ReturnType<typeof getNotifications>>;
 type Notification = Notifications[number];
@@ -30,6 +31,7 @@ const getNotificationType = (type: string) => {
 function Notifications() {
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const t = useTranslations('Notifications');
 
     useEffect(() => {
         const fetchNotifications = async () => {
@@ -55,19 +57,19 @@ function Notifications() {
     
   return (
     <div className="space-y-4">
-      <Card>
+      <Card className="h-auto">
         <CardHeader className="border-b">
           <div className="flex items-center justify-between">
-            <CardTitle>Notifications</CardTitle>
+            <CardTitle>{t('Notifications')}</CardTitle>
             <span className="text-sm text-muted-foreground">
-              {notifications.filter((n) => !n.read).length} unread
+              {notifications.filter((n) => !n.read).length} {t('Unread')}
             </span>
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <ScrollArea className="h-[calc(100vh-12rem)]">
+          <ScrollArea>
             {notifications.length === 0 ? (
-              <div className="p-4 text-center text-muted-foreground">No notifications yet</div>
+              <div className="p-4 text-center text-muted-foreground">{t('No notifications yet')}</div>
             ) : (
               notifications.map((notification) => (
                 <div
@@ -87,10 +89,10 @@ function Notifications() {
                           {notification.creator.name ?? notification.creator.username}
                         </span>{" "}
                         {notification.type === "FOLLOW"
-                          ? "started following you"
+                          ? t('Start following you')
                           : notification.type === "LIKE"
-                          ? "liked your post"
-                          : "commented on your post"}
+                          ? t('Like your post')
+                          : t('Commented on your post')}
                       </span>
                     </div>
 

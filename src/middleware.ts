@@ -7,7 +7,7 @@ const intlMiddleware = createMiddleware({
 })
 
 // Các route cần xác thực
-const privatePaths = ['/dashboard', '/admin']
+const privatePaths = ['/dashboard', '/admin', '/notifications']
 const authPaths = ['/signin', '/signup',]
 
 export function middleware(req: NextRequest) {

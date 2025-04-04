@@ -16,6 +16,15 @@
     "Posting": "Posting",
     "Welcome": "Welcome Back!"
   },
+  "Notifications": {
+    "Notifications": "Notifications",
+    "No notifications yet": "No notifications yet",
+    "Unread": "unread",
+    "Read": "read",
+    "Like your post": "likes your post",
+    "Start following you": "started following you",
+    "Commented on your post": "commented on your post"
+  },
   "NotFound": {
     "content": "Something went wrong"
   }

@@ -16,6 +16,33 @@
     "Posting": "Đang đăng",
     "Welcome": "Chào mừng trở lại!"
   },
+  "Notifications": {
+    "Notifications": "Thông báo",
+    "No notifications yet": "Không có thông báo nào",
+    "Unread": "chưa đọc",
+    "Read": "đã đọc",
+    "Like your post": "thích bài viết của bạn",
+    "Start following you": "bắt đầu theo dõi bạn",
+    "Commented on your post": "bình luận về bài viết của bạn"
+  },
+  "Profile": {
+    "Followers": "Người theo dõi",
+    "Following": "Đang theo dõi",
+    "Posts": "Bài viết",
+    "Name": "Tên",
+    "Location": "Địa điểm",
+    "Likes": "Đã thích",
+    "No posts yet": "Chưa có bài viết nào",
+    "No followers yet": "Chưa có người theo dõi nào",
+    "Follow": "Theo dõi",
+    "Unfollow": "Bỏ theo dõi",
+    "Edit Profile": "Chỉnh sửa hồ sơ",
+    "Bio": "Tiểu sử",
+    "Website": "Trang web",
+    "Save": "Lưu",
+    "Cancel": "Hủy",
+    "Your personal website": "Trang web cá nhân",
+  },
   "NotFound": {
     "content": "Có lỗi xảy ra"
   }
