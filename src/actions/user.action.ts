@@ -42,7 +42,7 @@ export async function signIn(formData: FormData) {
         },
       }
 
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    const isPasswordCorrect = user.password && await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect)
       return {
         errors: {
