@@ -222,7 +222,7 @@ function SignIn() {
 
                     <div className="text-muted-foreground text-center text-sm">
                         Don&apos;t have an account?{' '}
-                        <Link href="" tabIndex={5}>
+                        <Link href="/signup" tabIndex={5}>
                             Sign up
                         </Link>
                     </div>

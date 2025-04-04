@@ -20,7 +20,7 @@ function SignInModal({ children }: { children: React.ReactNode }) {
   const [clientErrors, setClientErrors] = useState<{ [key: string]: string[] }>({});
   const { setUser } = useAppContext();
   const router = useRouter();
-  
+
 
   const handleSubmit = (formData: FormData) => {
     setClientErrors({});
@@ -72,49 +72,49 @@ function SignInModal({ children }: { children: React.ReactNode }) {
   };
 
   const handleGoogleSignIn = async () => {
-          try {
-              const result = await signInWithPopup(auth, googleProvider);
-              const user = result.user;
-  
-              const formData = new FormData();
-              formData.append("email", user.email || "");
-              formData.append("username", user.email ? user.email.split('@')[0] : "");
-              formData.append("name", user.displayName || "");
-              formData.append("avatar", user.photoURL || "");
-  
-              signInWithGoogle(formData)
-                  .then((serverResult) => {
-                      if (!serverResult?.success) {
-                          setUser(null)
-                          toast.error(serverResult.message || 'Server error!')
-                      } else {
-                          if (serverResult.user) {
-                              const user: Omit<User, "password"> = {
-                                  id: serverResult.user.id,
-                                  email: serverResult.user.email,
-                                  username: serverResult.user.username,
-                                  name: serverResult.user.name ?? null,
-                                  bio: serverResult.user.bio ?? null,
-                                  image: serverResult.user.image ?? null,
-                                  location: serverResult.user.location ?? null,
-                                  website: serverResult.user.website ?? null,
-                                  createdAt: new Date(serverResult.user.createdAt),
-                                  updatedAt: new Date(serverResult.user.updatedAt),
-                              }
-                              setUser(user.id ? user : null)
-                          }
-                          router.push('/')
-                          toast.success(serverResult.message || 'Sign in successfully!')
-                      }
-                  })
-                  .catch((serverResult) => {
-                      toast.error(serverResult.message || "Sign-in fail. Please try again!")
-                  });
-  
-          } catch (error) {
-              console.error("Lỗi đăng nhập với Google:", error);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      const formData = new FormData();
+      formData.append("email", user.email || "");
+      formData.append("username", user.email ? user.email.split('@')[0] : "");
+      formData.append("name", user.displayName || "");
+      formData.append("avatar", user.photoURL || "");
+
+      signInWithGoogle(formData)
+        .then((serverResult) => {
+          if (!serverResult?.success) {
+            setUser(null)
+            toast.error(serverResult.message || 'Server error!')
+          } else {
+            if (serverResult.user) {
+              const user: Omit<User, "password"> = {
+                id: serverResult.user.id,
+                email: serverResult.user.email,
+                username: serverResult.user.username,
+                bio: serverResult.user.bio ?? null,
+                name: serverResult.user.name ?? null,
+                image: serverResult.user.image ?? null,
+                website: serverResult.user.website ?? null,
+                location: serverResult.user.location ?? null,
+                createdAt: new Date(serverResult.user.createdAt),
+                updatedAt: new Date(serverResult.user.updatedAt),
+              }
+              setUser(user.id ? user : null)
+            }
+            router.push('/')
+            toast.success(serverResult.message || 'Sign in successfully!')
           }
-      };
+        })
+        .catch((serverResult) => {
+          toast.error(serverResult.message || "Sign-in fail. Please try again!")
+        });
+
+    } catch (error) {
+      console.error("Lỗi đăng nhập với Google:", error);
+    }
+  };
 
   return (
     <Dialog>

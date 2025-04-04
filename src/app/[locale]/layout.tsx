@@ -11,7 +11,6 @@ import "./globals.css";
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 import { Toaster } from "react-hot-toast";
-import { headers } from "next/headers";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -31,23 +30,19 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  params: {locale}
+  params: { locale }
 }: Readonly<{
   children: React.ReactNode;
-  params: {locale: string};
+  params: { locale: string };
 }>) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
-  const messages = await getMessages();
-  const headersList = headers();
-  const domain = headersList.get('host') || "";
-  const url = headersList.get('referer') || "";
 
-  const hideSidebar = (url === `${domain}/${locale}/signin` || url === `${domain}/${locale}/signup`);
-    
+  const messages = await getMessages();
+
   return (
     <html lang={locale}>
       <head>
@@ -55,7 +50,7 @@ export default async function RootLayout({
         <title>Socially</title>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <NextIntlClientProvider locale={locale}  messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -67,16 +62,14 @@ export default async function RootLayout({
               <main className="py-8">
                 <div className="max-w-7xl mx-auto px-4">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    {!hideSidebar && (
-                        <div className="hidden lg:block lg:col-span-3">
-                          <Sidebar />
-                        </div>
-                      )}
+                    <div className="hidden lg:block lg:col-span-3">
+                      <Sidebar />
+                    </div>
                     <div className="lg:col-span-9">
                       {children}
                     </div>
                   </div>
-                </div>  
+                </div>
               </main>
             </div>
             <Toaster />
