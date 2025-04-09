@@ -10,7 +10,7 @@ import { signInSchema } from '@/app/[locale]/signin/validation';
 import { LoaderCircle } from 'lucide-react';
 import GoogleButton from 'react-google-button';
 import { signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '../../config/firebase-config';
+import { auth, googleProvider } from '../../config/firebase.config';
 import { User } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 

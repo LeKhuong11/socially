@@ -26,7 +26,8 @@ function CreatePost() {
     
         setIsPosting(true);
         try {
-            const result = await createPost(content, imageUrl);
+            const htmlContent = content.replace(/\n/g, '<br/>')
+            const result = await createPost(htmlContent, imageUrl);
             if (result?.success) {
                 // reset the form
                 setContent("");

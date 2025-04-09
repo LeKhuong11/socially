@@ -15,7 +15,7 @@ import { User } from '@prisma/client'
 import toast from 'react-hot-toast'
 import GoogleButton from 'react-google-button'
 import { signInWithPopup } from 'firebase/auth'
-import { auth, googleProvider } from '../../../../config/firebase-config'
+import { auth, googleProvider } from '../../../../config/firebase.config'
 
 function SignIn() {
     const [processing, setProcessing] = useState(false);

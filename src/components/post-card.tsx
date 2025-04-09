@@ -18,6 +18,7 @@ import SignInModal from "./signin-modal";
 
 type Posts = Awaited<ReturnType<typeof getPosts>>;
 type Post = Posts[number];
+const CHAR_LIMIT = 300;
 
 function PostCard({ post, dbUserId, isOwnPost }: { post: Post; dbUserId: string | null, isOwnPost: boolean }) {
     const { user } = useAppContext();
@@ -28,8 +29,14 @@ function PostCard({ post, dbUserId, isOwnPost }: { post: Post; dbUserId: string 
     const [ hasLiked, setHasLiked ] = useState(false);
     const [ optimisticLikes, setOptimisticLikes ] = useState(post._count.likes);
     const [showComments, setShowComments] = useState(false);
+    const [expanded, setExpanded] = useState(false);
 
     const locale = useLocale();
+
+    const plainText = post.content ? post.content.replace(/<br\s*\/?>/gi, '\n') : ''
+    const isLong = plainText.length > CHAR_LIMIT
+    const shortContent = post.content ? post.content.slice(0, post.content.indexOf(plainText[CHAR_LIMIT])) + '...' : ''
+    const handleToggleExpanded = () => setExpanded(!expanded)
 
     useEffect(() => {
       if (dbUserId !== null) {
@@ -118,7 +125,20 @@ function PostCard({ post, dbUserId, isOwnPost }: { post: Post; dbUserId: string 
                   <DeleteAlertDialog isDeleting={isDeleting} onDelete={handleDeletePost} />
                 )}
               </div>
-              <p className="mt-2 text-sm text-foreground break-words">{post.content}</p>
+              <div
+                className="mt-2 text-sm text-foreground break-words"
+                dangerouslySetInnerHTML={{
+                  __html: expanded || !isLong ? post.content || '' : shortContent,
+                }}
+              />
+              {isLong && (
+                <button
+                  className="text-blue-600 font-medium mt-2 hover:underline"
+                  onClick={handleToggleExpanded}
+                >
+                  {expanded ? 'See less' : 'See more'}
+                </button>
+              )}
             </div>
           </div>
 
