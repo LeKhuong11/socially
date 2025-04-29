@@ -15,6 +15,7 @@ import { useTranslations } from "next-intl";
 type Notifications = Awaited<ReturnType<typeof getNotifications>>;
 type Notification = Notifications[number];
 
+
 const getNotificationType = (type: string) => {
     switch (type) {
       case "LIKE":
@@ -100,7 +101,13 @@ function Notifications() {
                       (notification.type === "LIKE" || notification.type === "COMMENT") && (
                         <div className="pl-6 space-y-2">
                           <div className="text-sm text-muted-foreground rounded-md p-2 bg-muted/50 mt-2">
-                            <p>{notification.post.content}</p>
+                          <div
+                              className="mt-2 text-sm text-foreground break-words"
+                              dangerouslySetInnerHTML={{
+                                __html: notification.post.content ?? '',
+                              }}
+                            />
+                            {/* <p>{notification.post.content}</p> */}
                             {notification.post.image && (
                               <Image
                                 src={notification.post.image}

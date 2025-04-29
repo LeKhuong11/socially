@@ -18,7 +18,7 @@ import SignInModal from "./signin-modal";
 
 type Posts = Awaited<ReturnType<typeof getPosts>>;
 type Post = Posts[number];
-const CHAR_LIMIT = 300;
+const CHAR_LIMIT = 600;
 
 function PostCard({ post, dbUserId, isOwnPost }: { post: Post; dbUserId: string | null, isOwnPost: boolean }) {
     const { user } = useAppContext();
